@@ -18,15 +18,16 @@
 
 <body>
 
-    <section class="main-container">
-        <div class="content-container vh-100 w-100 d-flex flex-column align-items-center ">
+    <section class="main-container vh-100 w-100">
+        <div class="content-container  d-flex flex-column align-items-center ">
             <h1>TV Show Search</h1>
             <form id="searchForm">
                 <input type="text" placeholder="TV Show Title..." name="query" id="input">
                 <button>Search</button>
             </form>
-            <div class="row container">
-                <div class="header">
+
+            <div class="container">
+                <div class="header-info">
                     <h3 class="title">Tv Shows About<span class="changing-word">...</span> </h3>
                     <div class="progress-bar">
                         <div class="progress-item active"></div>
@@ -37,16 +38,14 @@
                 </div>
             </div>
 
-            <div class="img-container d-none ">
+            <div class="slider-container  ">
                 <button class="handle left-handle ">
                     <div class="text">&#8249;</div>
                 </button>
-
                 <div class="slider"></div>
                 <button class="handle right-handle">
                     <div class="text">&#8250;</div>
                 </button>
-
             </div>
         </div>
     </section>

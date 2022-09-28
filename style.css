@@ -4,17 +4,50 @@
     box-sizing: border-box;
 }
 
+html {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* scrollbar style change */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar:hover {
+    cursor: auto;
+    cursor: pointer;
+}
+
+::-webkit-scrollbar-track {
+
+    border-radius: 22px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 22px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+
 :root {
     --slider-padding: 5rem;
 }
 
-/* * { 
+/* * {
     outline: 1px solid red;
     outline-offset: -1px;
-  } */
+} */
 
 body {
-
     margin: 0;
     background-color: #333;
     color: #fefae0;
@@ -25,13 +58,16 @@ body {
 .main-container {
     width: 90%;
     margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
 }
 
-.content-container {
-    margin-top: 5%;
-}
+
+
 .content-container form {
-margin: 2%;
+    margin: 2%;
 }
 
 #searchForm button {
@@ -49,15 +85,15 @@ margin: 2%;
 
 .img-flex-container {
     background-color: aliceblue;
-  
+
 }
 
-.img-container {
+.slider-container {
     margin-top: 6%;
-    
-    display: flex;
+    display: none;
     justify-content: center;
-    overflow: hidden;
+    opacity: 0;
+    transition: 1s ease-in-out;
 }
 
 .slider {
@@ -68,15 +104,213 @@ margin: 2%;
     margin: 0 .25rem;
     transform: translateX(calc(var(--slider-index)*-100%));
     transition: transform 500ms ease-in-out;
+
 }
 
-.slider>img {
+.movie-container {
+    position: relative;
     max-width: calc(100%/var(--images-per-screen));
     flex: 0 0 calc(100%/var(--images-per-screen));
-    aspect-ratio: 16/14;
     padding: .25rem .3rem;
-    border-radius: 1.5rem;
+    border-radius: 50%;
+    transition: 500ms ease-in-out;
+    display: inline-block;
+    cursor: pointer;
+
+
 }
+
+.movie-container img {
+    width: 100%;
+    aspect-ratio: 16/12;
+
+}
+
+.movie-container img:hover {
+    width: 100%;
+    aspect-ratio: 16/12;
+    filter: blur(1.5rem);
+}
+
+
+
+
+.movie-container:hover {
+    transform: scale(1.5);
+    /* filter: blur(3px); */
+    z-index: 100;
+    flex-basis: 3;
+
+}
+
+.info-container,
+.bio-overlay {
+    position: absolute;
+    width: 100%;
+    opacity: 0;
+    transition: 0.7s ease-in-out;
+    flex-direction: column;
+    align-items: center;
+
+}
+
+.info-container,
+.bio-overlay {
+    -webkit-box-shadow: 0px 0px 23px 9px rgba(255, 255, 255, 0.12);
+    box-shadow: 0px 0px 23px 9px rgba(255, 255, 255, 0.12);
+}
+
+.info-container {
+    background: black;
+    color: white;
+    display: flex;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    padding-top: 2rem;
+
+}
+
+.bio-overlay {
+    background: white;
+    color: black;
+    display: none;
+    position: absolute;
+    height: 0;
+    bottom: 0;
+    left: 0;
+    overflow-y: auto;
+    display: block;
+    font-size: .7rem;
+    cursor: default;
+    margin: 0;
+    padding: 1rem;
+    justify-content: center;
+}
+
+.bio-overlay h4 {
+    font-size: 1rem;
+
+}
+
+.bio-overlay p {
+    height: 90%;
+    text-align: center;
+
+}
+
+.movie-container:hover .info-container {
+    opacity: .9;
+}
+
+
+.info-container h3 {
+    font-size: 1.5rem;
+}
+
+.info-container h4 {
+    font-size: .6rem;
+}
+
+.info-container h4:nth-of-type(1) {
+    margin-top: .3rem;
+}
+
+.open-bio-text {
+    font-size: .5rem;
+    color: black;
+    background-color: white;
+    padding: .15rem .4rem .3rem .6rem;
+    opacity: 1;
+    transition: 250ms ease-in-out;
+
+    margin-left: .5rem;
+    letter-spacing: 3px;
+    margin-top: .3rem;
+
+}
+
+.open-bio-text:hover {
+    background-color: #333533;
+    color: white;
+}
+
+.close-bio-text {
+    position: absolute;
+    left: 18px;
+    top: 10px;
+    width: 15px;
+    height: 15px;
+    opacity: 0.3;
+}
+
+.close-bio-text:hover {
+    opacity: 1;
+    cursor: pointer;
+}
+
+.close-bio-text:before,
+.close-bio-text:after {
+    position: fixed;
+    left: 18px;
+    content: ' ';
+    height: 15px;
+    width: 3px;
+    background-color: #333;
+}
+
+.close-bio-text:before {
+    transform: rotate(45deg);
+}
+
+.close-bio-text:after {
+    transform: rotate(-45deg);
+}
+
+.link-container {
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: .3rem;
+
+}
+
+
+.link-container a {
+    text-decoration: none;
+
+}
+
+.link-container a:nth-of-type(2) {
+    text-decoration: none;
+
+    margin: 0 1rem;
+}
+
+.link-container span {
+    font-size: .5rem;
+    color: black;
+    background-color: white;
+    padding: .15rem .4rem .3rem .6rem;
+    text-align: center;
+    transition: 250ms ease-in-out;
+    border: black solid 2px;
+    margin: 0;
+}
+
+
+
+.link-container span:hover {
+    color: white;
+    background-color: black;
+    border: white solid 2px;
+}
+
+
+
 
 .handle {
     border: none;
@@ -86,11 +320,13 @@ margin: 2%;
     background-color: rgba(0, 0, 0, 0.25);
     margin: .25rem 0;
     cursor: pointer;
-    display: flex;
+    display: none;
     align-items: center;
     justify-content: center;
     color: rgba(255, 255, 255, 0.5);
-    transition: all 250ms ease-in-out;
+    transition: all 1s ease-in-out;
+    opacity: 0;
+
 }
 
 .handle:hover,
@@ -127,14 +363,17 @@ margin: 2%;
     --bs-gutter-x: 0;
 }
 
-.header {
-    display: flex;
-    justify-content: space-between;
-    
+.header-info {
+    display: none;
+    opacity: 0;
+
+    transition: 1.5s ease-in-out;
+    justify-content: space-evenly;
 }
 
 .title {
     margin: 0;
+    white-space: nowrap;
 }
 
 .progress-bar {
@@ -147,8 +386,6 @@ margin: 2%;
     margin-right: 0;
 }
 
-
-
 .progress-item {
     flex: 0 0 2.5rem;
     min-width: 2.5rem;
@@ -158,4 +395,26 @@ margin: 2%;
 
 .progress-item.active {
     background-color: rgba(255, 255, 255, .9);
+}
+
+
+
+@media screen and (max-width: 1200px) {
+    .slider {
+        --images-per-screen: 4;
+    }
+
+    .content-container form {
+        margin: 4%;
+    }
+}
+
+@media screen and (max-width: 992px) {
+    .slider {
+        --images-per-screen: 3;
+    }
+
+    .title {
+        font-size: 1.3rem;
+    }
 }
