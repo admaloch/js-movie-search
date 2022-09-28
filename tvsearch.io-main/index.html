@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TV Show Search</title>
+    <!-- font oswald -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+    <!-- style -->
+    <link rel="stylesheet" href="./style.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+
+    <section class="main-container vh-100 w-100">
+        <div class="content-container  d-flex flex-column align-items-center ">
+            <h1>TV Show Search</h1>
+            <form id="searchForm">
+                <input type="text" placeholder="TV Show Title..." name="query" id="input">
+                <button>Search</button>
+            </form>
+
+            <div class="container">
+                <div class="header-info">
+                    <h3 class="title">Tv Shows About<span class="changing-word">...</span> </h3>
+                    <div class="progress-bar">
+                        <div class="progress-item active"></div>
+                        <div class="progress-item "></div>
+                        <div class="progress-item"></div>
+                        <div class="progress-item"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slider-container  ">
+                <button class="handle left-handle ">
+                    <div class="text">&#8249;</div>
+                </button>
+                <div class="slider"></div>
+                <button class="handle right-handle">
+                    <div class="text">&#8250;</div>
+                </button>
+            </div>
+        </div>
+    </section>
+    <!-- js -->
+    <script src="app.js"></script>
+</body>
+
+</html>
