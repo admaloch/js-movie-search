@@ -17,38 +17,79 @@
 </head>
 
 <body>
-
+    <!-- main section -->
     <section class="main-container vh-100 w-100">
-        <div class="content-container  d-flex flex-column align-items-center ">
-            <h1>Movie Search</h1>
+
+        <!-- search section -->
+        <div class="search-element">
+            <h1> <span class="title-change">Movie</span> Search</h1>
+            
+            <ul id="result-type-container">
+                <li class="movie-results active result-btn ">Movies</li>
+                <li class="tv-results result-btn">Tv</li>
+                <li class="all-results result-btn">Both</li>
+            </ul>
             <form id="searchForm">
-                <input type="text" placeholder="TV Show Title..." name="query" id="input">
+                <input type="text" class="form-control" placeholder="Movie Title..." autocomplete="off" name="query"
+                    id="search-input" onkeyup="findMovies()" onclick="findMovies()">
                 <button>Search</button>
+
             </form>
 
-            <div class="container">
-                <div class="header-info">
-                    <h3 class="title">Movies About<span class="changing-word">...</span> </h3>
-                    <div class="progress-bar">
-                        <div class="progress-item active"></div>
-                        <div class="progress-item "></div>
-                        <div class="progress-item"></div>
-                        <div class="progress-item"></div>
-                    </div>
+            <div class="search-list" id="search-list"></div>
+
+
+
+        </div>
+
+        <!-- subheader section -->
+        <div class="container">
+            <div class="header-info">
+                <h3 class="title"><span class="sub-title-change">Movies</span> about:<span class="changing-word"></span>
+                </h3>
+                <div class="progress-bar">
+                    <div class="progress-item active"></div>
+                    <div class="progress-item "></div>
+                    <div class="progress-item"></div>
+                    <div class="progress-item"></div>
                 </div>
             </div>
-
-            <div class="slider-container  ">
-                <button class="handle left-handle ">
-                    <div class="text">&#8249;</div>
-                </button>
-                <div class="slider"></div>
-                <button class="handle right-handle">
-                    <div class="text">&#8250;</div>
-                </button>
-            </div>
         </div>
+
+        <!-- modal section -->
+        <div class="container-fluid" id="modal">
+
+        </div>
+
+
+        <!-- slider section -->
+        <div class="slider-container  ">
+            <button class="handle left-handle ">
+                <div class="arrow">&#8249;</div>
+            </button>
+            <div class="slider"></div>
+            <button class="handle right-handle">
+                <div class="arrow">&#8250;</div>
+            </button>
+        </div>
+
+        <!-- message if results didn't come up with anything -->
+
+        <div class="no-results">
+
+            <h3>We couldn't find anything for that. Try searching for a specific topic<span id="error-change"> or movie</span>  to get better results.
+            </h3>
+
+        </div>
+
+
+
     </section>
+
+
+
+
+
     <!-- js -->
     <script src="app.js"></script>
 </body>

@@ -1,163 +1,372 @@
 // tmbd api key = 025781367a111a39abfd9121bed34f28
 // ex.requst = https://api.themoviedb.org/3/movie/550?api_key=025781367a111a39abfd9121bed34f28
 
+// variables for api request
+const api_key = '&apikey=84200d7a'
+let resultType = '&type=movie'
 
+// determine if the results are movies or shows
+const movieBtn = document.querySelector('.movie-results')
+const tvBtn = document.querySelector('.tv-results')
+const allBtn = document.querySelector('.all-results')
 
-
-
-
-const baseURL = 'https://api.themoviedb.org/3';
-let search = '/search/movie?'
-let stream = '/movie/{movie_id}/watch/providers'
-const apiKey = 'api_key=025781367a111a39abfd9121bed34f28';
-const otherParams = '&language=en-US&include_adult=false&page=1&query='
-
-let slider = document.querySelector('.slider');
-
-
-// submit handler.. capture input and send request to api and add images
+// dropdown list api result
 const searchForm = document.querySelector('#searchForm');
+const searchList = document.getElementById('search-list');
+const searchInput = document.getElementById('search-input');
+
+// slider fill variables
+let slider = document.querySelector('.slider');
+let changingTitle = document.querySelector('.title-change');
+let changingSubTitle = document.querySelector('.sub-title-change');
+const changingText = document.querySelector('.changing-word');
+const errorChange = document.getElementById('error-change');
 const headerInfo = document.querySelector('.header-info');
 const sliderContainer = document.querySelector('.slider-container');
 const arrow = document.querySelectorAll('.handle');
+
 const searchQueryText = document.querySelector('.changing-word');
 
-searchForm.addEventListener('submit', async function (e) {
-    try {
-        e.preventDefault();
-        fade(headerInfo, 1, 'auto')
-        arrow.forEach(arr => {
-            fade(arr, 1, 'auto', 'flex')
+
+
+const btns = document.querySelectorAll('.result-btn')
+
+
+for (let i = 0; i < btns.length; i++) {
+    btns[i].addEventListener("click", function () {
+        // change active class on button clickl
+        let current = document.getElementsByClassName("active");
+        current[0].className = current[0].className.replace(" active", "");
+        this.className += " active";
+        // fade in items
+        fade(sliderContainer, 0)
+        fade(headerInfo, 0)
+        fade(arrow, 0)
+        // change result type variable
+        changeResults(btns[i])
+    });
+}
+
+function changeResults(input) {
+    if (input.innerText === 'Movies') {
+        resultType = '&type=movie'
+        changingTitle.innerText = 'Movie'
+        changingSubTitle.innerText = 'Movies'
+        errorChange.innerText = ' or movie'
+    }
+    if (input.innerText === 'Tv') {
+        resultType = '&type=series'
+        changingTitle.innerText = 'TV Show'
+        changingSubTitle.innerText = 'Tv shows'
+        errorChange.innerText = ' or tv show'
+    }
+    if (input.innerText === 'Both') {
+        resultType = '&type='
+        changingTitle.innerText = 'Movie + TV Show'
+        changingSubTitle.innerText = 'Movies and Tv shows'
+        errorChange.innerText = ', movie or tv show'
+    }
+}
+
+
+
+// submit handler.. capture input and send request to api and add images
+// load movies from api
+async function loadMovies(searchTerm) {
+    const URL = `https://omdbapi.com/?s=${searchTerm}&page=1${api_key}${resultType}`;
+    const res = await fetch(`${URL}`);
+    const results = await res.json();
+    if (results.Response == "True") displayMovieList(results.Search);
+}
+
+// captures value and determines if movielist shows up
+function findMovies() {
+    let searchTerm = (searchInput.value).trim();
+
+    if (searchTerm.length > 1) {
+        searchList.classList.remove('hide-item');
+        searchList.scrollTop = 0
+        loadMovies(searchTerm);
+    } else {
+        searchList.classList.add('hide-item');
+    }
+}
+
+// add searchlist items
+function displayMovieList(movies) {
+    searchList.innerHTML = "";
+    for (let i = 0; i < movies.length; i++) {
+        let movieListItem = document.createElement('div');
+        movieListItem.dataset.id = movies[i].imdbID; // setting movie id in  data-id
+        movieListItem.classList.add('search-list-item');
+        if (movies[i].Poster != "N/A")
+            moviePoster = movies[i].Poster;
+        else
+            moviePoster = "image_not_found.png";
+        movieListItem.innerHTML = `
+        <div class = "search-item-thumbnail">
+            <img src = "${moviePoster}">
+        </div>
+        <div class = "search-item-info">
+            <h3>${movies[i].Title}</h3>
+            <p>${movies[i].Year}</p>
+        </div>
+        `;
+        searchList.appendChild(movieListItem);
+    }
+    loadMovieDetails()
+    loadSliderDetails()
+}
+
+function loadMovieDetails() {
+    const searchListMovies = searchList.querySelectorAll('.search-list-item')
+    searchListMovies.forEach(movie => {
+        movie.addEventListener('click', async () => {
+            // console.log(movie.dataset.id)
+            searchList.classList.add('hide-item')
+            searchInput.value = '';
+            const result = await fetch(`http://www.omdbapi.com/?i=${movie.dataset.id}${api_key}${resultType}`)
+            const movieDetails = await result.json();
+
+            displayMovieDetails(movieDetails);
         })
+    })
+}
+
+const modal = document.getElementById('modal');
+function displayMovieDetails(details) {
+    modal.classList.remove('d-none')
+    modal.innerHTML = `
+<div class="overlay">
+    <div class="result-container">
+        <div class="movie-info-container">
+            <div class="movie-poster">
+                <img src="${(details.Poster != " N/A") ? details.Poster : "image_not_found.png"}"
+                    alt="movie poster">
+            </div>
+            <div class="movie-info">
+                <h3 class="movie-title">${details.Title}</h3>
+                <ul class="movie-misc-info">
+                    <li class="year"> <span>Runtime:</span> ${details.Runtime}-</li>
+                    <li class="rated"> <span>Rated:</span> ${details.Rated}-</li>
+                    <li class="released"> <span>Released:</span> ${details.Released.split(' ').pop()}</li>
+                </ul>
+                <p class="genre"><span>Genre:</span> ${details.Genre}</p>
+                <p class="writer"><span>Director:</span> ${details.Director}</p>
+                <p class="actors"><span>Actors: </span>${details.Actors}</p>
+                <p class="plot"><span>Plot:</span> ${details.Plot}</p>
+                <p class="language"><span>Language:</span> ${details.Language}</p>
+                <div class="modal-buttons">
+                    <button class="modal-btn" id="btn-close">Close</button>
+                    <a class="modal-btn" href="https://www.google.com/search?q=${details.Title}" target="_blank">
+                    <div>Search</div>
+                </a>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>       
+    `;
+
+    const btnClose = document.getElementById('btn-close');
+    btnClose.addEventListener('click', () => {
+        modal.classList.add('d-none')
+    })
+}
+
+window.addEventListener('click', (event) => {
+    if (event.target.className != "form-control") {
+        searchList.classList.add('hide-item')
+    }
+})
+
+const noResults = document.querySelector('.no-results');
+
+
+//SLIDER SECTION-------------------------------------------------
+//slider results from general search keyword on submit
+// submit handler.. capture input and send request to api and add images
+searchForm.addEventListener('submit', async function (e) {
+
+
+    e.preventDefault();
+    searchList.classList.add('hide-item');
+    try {
+
         let input = searchForm.elements.query.value;
 
-        const results = await axios.get(`${baseURL}${search}${apiKey}${otherParams}${input}`);
+        const URL = `https://omdbapi.com/?s=${input}&page=1${api_key}${resultType}`;
+        const res = await fetch(`${URL}`);
 
-        searchQueryText.style.color = brightColorGen();
-        searchQueryText.innerText = ' ' + input.charAt(0).toUpperCase() + input.slice(1);
+        const newResults = await res.json();
+        console.log(newResults)
+        changingText.style.color = brightColorGen();
+        changingText.innerText = ' ' + input.charAt(0).toUpperCase() + input.slice(1);
         searchForm.elements.query.value = '';
-        fade(sliderContainer, 1, 'auto')
-        addImages(results.data.results);
+
+        console.log(newResults.Response)
+        if (newResults.Response == "True") {
+            fade(noResults, 0, 0)
+            fade(headerInfo, 1, 'auto')
+            arrow.forEach(arr => {
+                fade(arr, 1, 'auto', 'flex')
+            })
+            fade(sliderContainer, 1, 'auto')
+            displaySliderItems(newResults.Search);
+
+        } else {
+            fade(noResults, 1, 'auto')
+        }
+
     }
     catch {
-        console.log('image not loaded');
-    };
+        console.log('request failed')
+    }
+
 });
 
-// stream link
 
-const streamLink = async function (id) {
-    await axios.get(`${baseURL}/movie/${id}/watch/providers?${apiKey}`);
-}
-
-
-
-
-// take input and add images to page
-const addImages = (input) => {
+// add search results to page as slider on submit
+const displaySliderItems = (input) => {
+    slider.innerHTML = ''
     for (let i = 0; i <= input.length; i++) {
 
-        const movieContainer = document.createElement('div');
+        let movieContainer = document.createElement('div');
+        movieContainer.dataset.id = input[i].imdbID;
         movieContainer.classList.add('movie-container')
-        slider.append(movieContainer)
-        const movieImg = document.createElement('img')
-        const imgUrl = input[i].poster_path
-        movieImg.src = `https://image.tmdb.org/t/p/w500${imgUrl}`
+        if (input[i].Poster != "N/A")
+            imageMovie = input[i].Poster;
+        else
+            imageMovie = "image_not_found.png";
 
-        // create container and add info items with text on hover
-        const infoContainer = document.createElement('div')
-        infoContainer.classList.add('info-container')
-        const title = document.createElement('h3')
-        title.innerText = input[i].original_title
+        movieContainer.innerHTML = `
+        <img src="${imageMovie}" alt="movie image">
+        `
 
-
-        const genre = document.createElement('h4')
-        genre.innerText = `Genre: `
+        slider.appendChild(movieContainer)
 
 
-        const rating = document.createElement('h4')
-        rating.innerText = `Rating: ${input[i].vote_average} `
-
-
-        //overview btn-- reveal movie synopsus
-        const bioOpen = document.createElement('div')
-        bioOpen.classList.add('open-bio-text')
-        bioOpen.innerText = 'Overview'
-
-        // movie synopsus create overlay with text
-        const bioOverlay = document.createElement('div')
-        bioOverlay.classList.add('bio-overlay')
-        const bioTitle = document.createElement('h4')
-        bioTitle.innerText = 'Overview'
-        bioOverlay.append(bioTitle)
-        const bioText = document.createElement('p')
-        bioOverlay.append(bioText)
-        bioText.innerText = input[i].overview
-
-        // close synopsus overlay
-        const bioClose = document.createElement('div')
-        bioClose.classList.add('close-bio-text')
-        bioOverlay.append(bioClose)
-
-
-
-
-        // create bubbles with links at bottom
-        const linkContainer = document.createElement('div')
-        linkContainer.classList.add('link-container')
-
-
-        const reviewLink = document.createElement('a')
-        reviewLink.setAttribute('href', 'https://www.rottentomatoes.com/')
-        reviewLink.setAttribute('target', '_blank')
-        const reviewSpan = document.createElement('span')
-        reviewSpan.innerText = 'Reviews'
-        reviewLink.append(reviewSpan)
-
-        const searchLink = document.createElement('a')
-        searchLink.setAttribute('href', `https://www.google.com/search?q=${input[i].original_title}`)
-        searchLink.setAttribute('target', '_blank')
-        const searchSpan = document.createElement('span')
-        searchSpan.innerText = 'Search'
-        searchLink.append(searchSpan)
-
-        // streamlink
-
-        
-
-        const streamLink = document.createElement('a')
-        console.log(input[i].id)
-        streamLink.setAttribute('href', 'https://www.google.com/search?q=input[i].original_title')
-        streamLink.setAttribute('target', '_blank')
-        const streamSpan = document.createElement('span')
-        streamSpan.innerText = 'Stream'
-        streamLink.append(streamSpan)
-
-
-        bioOpen.addEventListener('click', () => {
-            fade(bioOverlay, 1, "100%")
-        })
-        bioClose.addEventListener('click', () => {
-            fade(bioOverlay, 0, 0)
-            setTimeout(() => {
-                bioOverlay.scrollTop = 0;
-            }, "300")
-        })
-        movieContainer.addEventListener('mouseleave', () => {
-            fade(bioOverlay, 0, 0)
-            setTimeout(() => {
-                bioOverlay.scrollTop = 0;
-            }, "300")
-        })
-
-        linkContainer.append(reviewLink, searchLink, streamLink)
-        infoContainer.append(title, genre, rating, bioOpen, linkContainer)
-        movieContainer.append(movieImg, infoContainer, bioOverlay)
 
     }
+
+}
+
+// grab imbd ID of each movie and send another request for more info
+function loadSliderDetails() {
+    let movieContainer = slider.querySelectorAll('.movie-container')
+
+    movieContainer.forEach(movie => {
+
+        movie.addEventListener('mouseenter', async () => {
+            arrow.forEach(arr => fade(arr, 0))
+            const result = await fetch(`http://www.omdbapi.com/?i=${movie.dataset.id}${api_key}${resultType}`)
+            const movieInfo = await result.json();
+            console.log(movieInfo)
+            displaySliderDetails(movieInfo, movie)
+        });
+        movie.addEventListener('mouseleave', () => {
+            arrow.forEach(arr => fade(arr, 1))
+        })
+    })
 }
 
 
+
+
+const displaySliderDetails = (input, item) => {
+
+    // add hover items
+    const infoContainer = document.createElement('div')
+    infoContainer.classList.add('info-container')
+    const title = document.createElement('h3')
+    title.innerText = input.Title
+    title.classList.add('movie-title')
+
+    title.innerText.split(' ').length > 10
+        ? title.style.fontSize = '.8rem'
+        : title.style.fontSize = '1.5rem';
+
+    const directed = document.createElement('h4')
+    directed.innerText = `Directed by: ${input.Director} `
+    const released = document.createElement('h4')
+    released.innerText = `Released: ${input.Released.split(' ').pop()} `
+    const rating = document.createElement('h4')
+    rating.innerText = `Rated: ${input.Rated} `
+    const score = document.createElement('h4')
+    const media = document.createElement('h4')
+    media.innerText = `Type: ${input.Type.charAt(0).toUpperCase() + input.Type.slice(1)} `
+
+    if (!input.Ratings[1]) {
+        scores = `Imdb score: ${input.imdbRating}`
+    } else {
+        scores = `Rotten Tomatoes Score: ${input.Ratings[1].Value}`;
+    }
+
+    !input.Ratings[1] ? scores = `Imdb score: ${input.imdbRating}`
+        : scores = `Rotten Tomatoes Score: ${input.Ratings[1].Value}`;
+
+
+    score.innerText = `${scores}`
+    //overview btn-- reveal movie synopsus
+    const bioOpen = document.createElement('div')
+    bioOpen.classList.add('hover-btn')
+    bioOpen.innerText = 'Overview'
+
+    //more btn click for modal info
+    const moreBtn = document.createElement('div')
+    moreBtn.classList.add('hover-btn')
+    moreBtn.setAttribute("id", "more-btn");
+    moreBtn.innerText = 'More Information'
+
+    // movie synopsus create overlay with text
+    const bioOverlay = document.createElement('div')
+    bioOverlay.classList.add('bio-overlay')
+    const bioTitle = document.createElement('h4')
+    bioTitle.innerText = 'Overview'
+    bioOverlay.append(bioTitle)
+    const bioText = document.createElement('p')
+    bioOverlay.append(bioText)
+    bioText.innerText = input.Plot
+
+    // close synopsus overlay
+    const bioClose = document.createElement('div')
+    bioClose.classList.add('close-bio-text')
+    bioOverlay.append(bioClose)
+
+    infoContainer.append(title, directed, released, rating, score, media, bioOpen, moreBtn)
+    item.append(infoContainer, bioOverlay)
+
+    bioListeners(bioOverlay, bioOpen, bioClose, item)
+    bioClick(input, moreBtn)
+}
+
+function bioClick(info, btn) {
+    btn.addEventListener('click', () => {
+        displayMovieDetails(info)
+    })
+}
+
+
+
+function bioListeners(item, open, close, leave) {
+    open.addEventListener('click', () => {
+        fade(item, 1, "100%")
+    })
+    close.addEventListener('click', () => {
+        fade(item, 0, 0)
+        setTimeout(() => {
+            item.scrollTop = 0;
+        }, "300")
+    })
+    leave.addEventListener('mouseleave', () => {
+        fade(item, 0, 0)
+        setTimeout(() => {
+            item.scrollTop = 0;
+        }, "300")
+    })
+}
 
 // delete previous results if any when new search is submitted
 const button = document.querySelector('button');
@@ -174,44 +383,28 @@ const brightColorGen = () => {
         (85 + 10 * Math.random()) + '%)'
 }
 
-// function to handle above event handlers in one place.. can't get it to work
-// const bioHandler = (eventItem, changeItem) => {
-//     if (changeItem.style.display === 'none') {
-//         eventItem.addEventListener('click', () => {
-//             fade(changeItem, 'flex', 1, "100%")
-//         })
-//     }
-//     if (changeItem.style.display !== 'none') {
-//         eventItem.addEventListener('click', () => {
-//             fade(changeItem, 'none', 0, 0)
-//             setTimeout(() => {
-//                 changeItem.scrollTop = 0;
-//             }, "300")
-//         })
-
-//     }
-// }
-
-
-
 // function to fade items in
 const fade = (input, opacity, height, display) => {
-    if (input.style.display === 'none') {
-        input.style.display = display;
-        setTimeout(() => {
+    try {
+        if (input.style.display === 'none') {
+            input.style.display = display;
+            setTimeout(() => {
+                input.style.opacity = opacity;
+                input.style.height = height;
+
+            }, "100")
+        } else {
             input.style.opacity = opacity;
             input.style.height = height;
 
-        }, "100")
-    } else {
-        input.style.opacity = opacity;
-        input.style.height = height;
-
-        setTimeout(() => {
-            input.style.display = display;
-        }, "400")
+            setTimeout(() => {
+                input.style.display = display;
+            }, "100")
+        }
     }
+    catch {
 
+    }
 }
 
 // slider arrow  click listener.. 
@@ -243,3 +436,53 @@ function onHandleClick(handle) {
 
 
 
+
+// item.innerHTML = `
+
+    // <img src="${movieInfo.Poster}" alt="movie image">
+    // <div class="info-container">
+    //     <h3>${movieInfo.Title}</h3>
+    //     <h4>Year: ${movieInfo.Year}</h4>
+    //     ${bioOpen}
+    //     <div class="link-container">
+    //         <a href="https://www.rottentomatoes.com/" target="_blank">
+    //             <span>Reviews</span>
+    //         </a>
+    //         <div id="info-btn">
+    //             <span>More Info</span>
+    //         </div>
+    //         <a href="https://www.google.com/search?q=${movieInfo.Title}" target="_blank">
+    //             <span>Stream</span>
+    //         </a>
+    //     </div>
+    // </div>
+    // <div class="bio-overlay">
+    //     <h4>Overview</h4>
+    //     <p>${movieInfo.Plot}</p>
+    //     <div class="close-bio-text"></div>
+    // </div>
+
+
+    // const reviewLink = document.createElement('a')
+    // reviewLink.setAttribute('href', 'https://www.rottentomatoes.com/')
+    // reviewLink.setAttribute('target', '_blank')
+    // const reviewSpan = document.createElement('span')
+    // reviewSpan.innerText = 'Reviews'
+    // reviewLink.append(reviewSpan)
+
+    // const searchLink = document.createElement('a')
+    // searchLink.setAttribute('href', `https://www.google.com/search?q=${input.Title}`)
+    // searchLink.setAttribute('target', '_blank')
+    // const searchSpan = document.createElement('span')
+    // searchSpan.innerText = 'Search'
+    // searchLink.append(searchSpan)
+
+    // // streamlink
+
+    // const streamLink = document.createElement('a')
+
+    // streamLink.setAttribute('href', 'https://www.google.com/search?q=input.Title')
+    // streamLink.setAttribute('target', '_blank')
+    // const streamSpan = document.createElement('span')
+    // streamSpan.innerText = 'Stream'
+    // streamLink.append(streamSpan)
