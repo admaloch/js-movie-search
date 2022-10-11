@@ -433,7 +433,7 @@ body {
 
 .info-container {
     background: black;
-    border: white solid 1px;
+    
     color: white;
     display: flex;
     justify-content: center;

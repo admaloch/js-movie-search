@@ -92,7 +92,7 @@ async function loadMovies(searchTerm) {
 function findMovies() {
     let searchTerm = (searchInput.value).trim();
 
-    if (searchTerm.length > 1) {
+    if (searchTerm.length > 0) {
         fade(searchList, 1, 'flex')
         searchList.scrollTop = 0
         loadMovies(searchTerm);
@@ -215,7 +215,7 @@ searchForm.addEventListener('submit', async function (e) {
     changingText.innerText = ' ' + input.charAt(0).toUpperCase() + input.slice(1);
     searchForm.elements.query.value = '';
 
-    console.log(input.length)
+
     if (newResults.Response == "True") {
         searchElement.style.margin = '0 0 0 0'
 
@@ -265,39 +265,39 @@ const displaySliderItems = (input) => {
         movieContainer.innerHTML = `
         <img src="${imageMovie}" alt="movie image">
         `
-
         slider.appendChild(movieContainer)
-
-
-
     }
-
 }
 
 // grab imbd ID of each movie and send another request for more info
 function loadSliderDetails() {
     let movieContainer = slider.querySelectorAll('.movie-container')
-
     movieContainer.forEach(movie => {
-
-        movie.addEventListener('mouseenter', async () => {
+        movie.addEventListener('mouseenter', async (e) => {
+            e.stopPropagation()
             arrow.forEach(arr => fade(arr, 0))
             const result = await fetch(`http://www.omdbapi.com/?i=${movie.dataset.id}${api_key}${resultType}&plot=full`)
             const movieInfo = await result.json();
-
             displaySliderDetails(movieInfo, movie)
+
         });
         movie.addEventListener('mouseleave', () => {
             arrow.forEach(arr => fade(arr, 1))
+            removeItems()
         })
     })
 }
 
-
-
+function removeItems() {
+    const newInfoContainer = document.querySelectorAll('.info-container')
+    const newBioOverlay = document.querySelectorAll('.bio-overlay')
+    setTimeout(() => {
+        newInfoContainer.forEach(info => info.remove())
+        newBioOverlay.forEach(bio => bio.remove())
+    }, "400")
+}
 
 const displaySliderDetails = (input, item) => {
-
     // add hover items
     const infoContainer = document.createElement('div')
     infoContainer.classList.add('info-container')
@@ -359,8 +359,10 @@ const displaySliderDetails = (input, item) => {
     infoContainer.append(title, directed, released, rating, score, media, bioOpen, moreBtn)
     item.append(infoContainer, bioOverlay)
 
+
     bioListeners(bioOverlay, bioOpen, bioClose, item)
     bioClick(input, moreBtn)
+
 }
 
 function bioClick(info, btn) {
