@@ -198,36 +198,26 @@ const noResultsText = document.querySelector('.no-results-text');
 //slider results from general search keyword on submit
 // submit handler.. capture input and send request to api and add images
 searchForm.addEventListener('submit', async function (e) {
-
-
     e.preventDefault();
     fade(searchList, 0, 'none')
 
-
     let input = searchForm.elements.query.value;
-
     const URL = `https://omdbapi.com/?s=${input}&page=1${api_key}${resultType}`;
     const res = await fetch(`${URL}`);
-
     const newResults = await res.json();
-
     changingText.style.color = brightColorGen();
     changingText.innerText = ' ' + input.charAt(0).toUpperCase() + input.slice(1);
     searchForm.elements.query.value = '';
 
-
     if (newResults.Response == "True") {
         searchElement.style.margin = '0 0 0 0'
-
         fade(noResults, 0, 'none')
         fade(headerInfo, 1)
         arrow.forEach(arr => {
             fade(arr, 1)
         })
-
         fade(sliderContainer, 1, 'flex')
         displaySliderItems(newResults.Search);
-
     } else {
         if (input.length === 0) {
             noResultsText.innerHTML = `It looks like you forgot to enter a search term. Try searching for a specific topic${errorChange.innerText}`
@@ -238,22 +228,15 @@ searchForm.addEventListener('submit', async function (e) {
         arrow.forEach(arr => {
             fade(arr, 0)
         })
-
         fade(sliderContainer, 0, 'none')
-
         fade(noResults, 1, 'flex')
-
     }
-
-
 });
-
 
 // add search results to page as slider on submit
 const displaySliderItems = (input) => {
     slider.innerHTML = ''
     for (let i = 0; i <= input.length; i++) {
-
         let movieContainer = document.createElement('div');
         movieContainer.dataset.id = input[i].imdbID;
         movieContainer.classList.add('movie-container')
@@ -261,7 +244,6 @@ const displaySliderItems = (input) => {
             imageMovie = input[i].Poster;
         else
             imageMovie = "image_not_found.png";
-
         movieContainer.innerHTML = `
         <img src="${imageMovie}" alt="movie image">
         `
@@ -279,7 +261,6 @@ function loadSliderDetails() {
             const result = await fetch(`http://www.omdbapi.com/?i=${movie.dataset.id}${api_key}${resultType}&plot=full`)
             const movieInfo = await result.json();
             displaySliderDetails(movieInfo, movie)
-
         });
         movie.addEventListener('mouseleave', () => {
             arrow.forEach(arr => fade(arr, 1))
