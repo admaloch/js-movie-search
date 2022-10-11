@@ -69,8 +69,11 @@ body {
 
 .main-container {
     width: 90%;
-    margin: 0 auto;
+
     display: flex;
+    
+    margin-top: 9.5rem;
+
     flex-direction: column;
     align-items: center;
     position: relative;
@@ -83,15 +86,15 @@ body {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
-    margin-top: 3rem;
     flex-direction: column;
     align-items: center;
-    
-
+    min-width: 500px;
     position: relative;
-
-
+    
+    transition:  500ms ease-in-out;
 }
+
+
 
 
 
@@ -119,7 +122,7 @@ body {
     border: #edf2f4 solid 2px;
     color: #edf2f4;
     background-color: #333;
-    transition: all 250ms ease-in-out;
+    transition: all 500ms ease-in-out;
     font-size: 1.5rem;
     padding: 0 1rem .2rem;
 }
@@ -171,13 +174,13 @@ body {
     max-height: 300px;
     overflow-y: scroll;
     z-index: 10;
-
+    height: none;
     flex-direction: column;
     align-items: center;
     display: none;
     opacity: 0;
-    height: 0;
-    transition: 1s ease-in-out;
+
+    transition: .5s ease-in-out;
 }
 
 
@@ -235,6 +238,9 @@ body {
 
 #modal {
     z-index: 100;
+    display: none;
+    opacity: 0;
+    transition: opacity 500ms ease-in-out;
 }
 
 .overlay {
@@ -260,6 +266,7 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
 
 }
 
@@ -326,7 +333,10 @@ body {
 
 .movie-info .plot {
     max-width: 400px;
+    max-height: 300px;
+    overflow-y: scroll;
     margin: 1rem auto;
+
 }
 
 
@@ -361,11 +371,11 @@ body {
 
 .slider-container {
     margin-top: 3rem;
-    display: flex;
-    height: 0;
+    display: none;
+
     justify-content: center;
     opacity: 0;
-    transition: all 1s ease-in-out;
+    transition: opacity 1s ease-in-out;
 
 }
 
@@ -387,32 +397,22 @@ body {
     flex: 0 0 calc(100%/var(--images-per-screen));
     padding: 0 .3rem;
     border-radius: 50%;
-    transition: 500ms ease-in-out;
+    transition: transform .5s ease-in-out;
     display: inline-block;
-
-
-
 }
-
-.movie-container img {
-    width: 100%;
-    aspect-ratio: 16/16;
-    min-height: 100;
-
-
-}
-
-/* .movie-container img:hover {
-    filter: blur(1.5rem);
-} */
-
 
 .movie-container:hover {
     transform: scale(1.5);
     /* filter: blur(3px); */
     z-index: 100;
     flex-basis: 3;
+}
 
+.movie-container img {
+    width: 100%;
+    aspect-ratio: 16/16;
+    min-height: 100;
+    transition: filter 500ms ease-in-out;
 }
 
 
@@ -421,9 +421,8 @@ body {
 .bio-overlay {
     position: absolute;
     width: 100%;
-
     opacity: 0;
-    transition: 0.7s ease-in-out;
+    transition: opacity 0.5s ease-in-out;
     flex-direction: column;
     align-items: center;
     -webkit-box-shadow: 0px 0px 15px 7px rgba(0, 0, 0, 0.17);
@@ -442,11 +441,9 @@ body {
     bottom: 0;
     right: 0;
     left: 0;
-
-
 }
 
-.movie-container:hover .info-container {
+.info-container:hover {
     opacity: .9;
 }
 
@@ -495,13 +492,13 @@ body {
     background: white;
     border: black solid 2px;
     color: black;
-    display: flex;
+    display: none;
     position: absolute;
     height: 0;
     bottom: 0;
     left: 0;
     overflow-y: auto;
-    display: block;
+
     font-size: .7rem;
     cursor: default;
     margin: 0;
@@ -511,7 +508,7 @@ body {
     width: 100%;
 
     opacity: 0;
-    transition: 0.5s ease-in-out;
+    transition: all 0.5s ease-in-out;
     flex-direction: column;
     align-items: center;
     -webkit-box-shadow: 0px 0px 15px 7px rgba(0, 0, 0, 0.17);
@@ -538,8 +535,8 @@ body {
 
 .close-bio-text {
     position: absolute;
-    left: 18px;
-    top: 10px;
+    left: 10px;
+    top: 12px;
     width: 15px;
     height: 15px;
     opacity: 0.3;
@@ -586,13 +583,13 @@ body {
     flex-grow: 0;
     z-index: 10;
     background-color: rgba(0, 0, 0, 0.25);
-    display: none;
+    display: flex;
     cursor: pointer;
-    height: 0;
+
     align-items: center;
     justify-content: center;
     color: rgba(255, 255, 255, 0.5);
-    transition: all 1s ease-in-out;
+    transition: all .5s ease-in-out;
     opacity: 0;
 
 
@@ -636,8 +633,8 @@ body {
 .header-info {
     display: flex;
     opacity: 0;
-    height: 0;
-    transition: 1s ease-in-out;
+
+    transition: .5s ease-in-out;
     justify-content: space-evenly;
     margin-top: 1rem;
 }
@@ -669,16 +666,15 @@ body {
 }
 
 .no-results {
-    margin: 0 auto;
+    margin-top: 2rem;
     width: 40%;
-    display: flex;
+    display: none;
     justify-content: center;
     align-items: center;
     text-align: center;
     opacity: 0;
-    height: 0;
+    transition: 1.5s ease-in-out;
 
-    transition: 1s;
 }
 
 

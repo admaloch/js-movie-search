@@ -1,4 +1,4 @@
-// tmbd api key = 025781367a111a39abfd9121bed34f28
+// tmbd api key = 025781367a111a39acbfd9121bed34f28
 // ex.requst = https://api.themoviedb.org/3/movie/550?api_key=025781367a111a39abfd9121bed34f28
 
 // variables for api request
@@ -27,10 +27,14 @@ const arrow = document.querySelectorAll('.handle');
 
 const searchQueryText = document.querySelector('.changing-word');
 
-
+const searchElement = document.querySelector('.search-element');
+// searchElement.style.margin = '8rem 0 0 0'
 
 const btns = document.querySelectorAll('.result-btn')
 
+window.onload = function () {
+    searchElement.style.margin = '8rem 0 0 0'
+};
 
 for (let i = 0; i < btns.length; i++) {
     btns[i].addEventListener("click", function () {
@@ -38,10 +42,12 @@ for (let i = 0; i < btns.length; i++) {
         let current = document.getElementsByClassName("active");
         current[0].className = current[0].className.replace(" active", "");
         this.className += " active";
-        // fade in items
-        fade(sliderContainer, 0)
+        // fade out items
+
+        fade(sliderContainer, 0, 'none')
         fade(headerInfo, 0)
         fade(arrow, 0)
+        searchElement.style.margin = '8rem 0 0 0'
         // change result type variable
         changeResults(btns[i])
     });
@@ -50,18 +56,21 @@ for (let i = 0; i < btns.length; i++) {
 function changeResults(input) {
     if (input.innerText === 'Movies') {
         resultType = '&type=movie'
+        fade(noResults, 0, 'none')
         changingTitle.innerText = 'Movie'
         changingSubTitle.innerText = 'Movies'
         errorChange.innerText = ' or movie'
     }
     if (input.innerText === 'Tv') {
         resultType = '&type=series'
+        fade(noResults, 0, 'none')
         changingTitle.innerText = 'TV Show'
         changingSubTitle.innerText = 'Tv shows'
         errorChange.innerText = ' or tv show'
     }
     if (input.innerText === 'Both') {
         resultType = '&type='
+        fade(noResults, 0, 'none')
         changingTitle.innerText = 'Movie + TV Show'
         changingSubTitle.innerText = 'Movies and Tv shows'
         errorChange.innerText = ', movie or tv show'
@@ -84,11 +93,11 @@ function findMovies() {
     let searchTerm = (searchInput.value).trim();
 
     if (searchTerm.length > 1) {
-        searchList.classList.remove('hide-item');
+        fade(searchList, 1, 'flex')
         searchList.scrollTop = 0
         loadMovies(searchTerm);
     } else {
-        searchList.classList.add('hide-item');
+        fade(searchList, 0, 'none')
     }
 }
 
@@ -123,9 +132,9 @@ function loadMovieDetails() {
     searchListMovies.forEach(movie => {
         movie.addEventListener('click', async () => {
             // console.log(movie.dataset.id)
-            searchList.classList.add('hide-item')
+            fade(searchList, 0, 'none')
             searchInput.value = '';
-            const result = await fetch(`http://www.omdbapi.com/?i=${movie.dataset.id}${api_key}${resultType}`)
+            const result = await fetch(`http://www.omdbapi.com/?i=${movie.dataset.id}${api_key}${resultType}&plot=full`)
             const movieDetails = await result.json();
 
             displayMovieDetails(movieDetails);
@@ -135,7 +144,7 @@ function loadMovieDetails() {
 
 const modal = document.getElementById('modal');
 function displayMovieDetails(details) {
-    modal.classList.remove('d-none')
+    fade(modal, 1, 'flex')
     modal.innerHTML = `
 <div class="overlay">
     <div class="result-container">
@@ -172,18 +181,18 @@ function displayMovieDetails(details) {
 
     const btnClose = document.getElementById('btn-close');
     btnClose.addEventListener('click', () => {
-        modal.classList.add('d-none')
+        fade(modal, 0, 'none')
     })
 }
 
 window.addEventListener('click', (event) => {
     if (event.target.className != "form-control") {
-        searchList.classList.add('hide-item')
+        fade(searchList, 0, 'none')
     }
 })
 
 const noResults = document.querySelector('.no-results');
-
+const noResultsText = document.querySelector('.no-results-text');
 
 //SLIDER SECTION-------------------------------------------------
 //slider results from general search keyword on submit
@@ -192,38 +201,50 @@ searchForm.addEventListener('submit', async function (e) {
 
 
     e.preventDefault();
-    searchList.classList.add('hide-item');
-    try {
+    fade(searchList, 0, 'none')
 
-        let input = searchForm.elements.query.value;
 
-        const URL = `https://omdbapi.com/?s=${input}&page=1${api_key}${resultType}`;
-        const res = await fetch(`${URL}`);
+    let input = searchForm.elements.query.value;
 
-        const newResults = await res.json();
-        console.log(newResults)
-        changingText.style.color = brightColorGen();
-        changingText.innerText = ' ' + input.charAt(0).toUpperCase() + input.slice(1);
-        searchForm.elements.query.value = '';
+    const URL = `https://omdbapi.com/?s=${input}&page=1${api_key}${resultType}`;
+    const res = await fetch(`${URL}`);
 
-        console.log(newResults.Response)
-        if (newResults.Response == "True") {
-            fade(noResults, 0, 0)
-            fade(headerInfo, 1, 'auto')
-            arrow.forEach(arr => {
-                fade(arr, 1, 'auto', 'flex')
-            })
-            fade(sliderContainer, 1, 'auto')
-            displaySliderItems(newResults.Search);
+    const newResults = await res.json();
 
+    changingText.style.color = brightColorGen();
+    changingText.innerText = ' ' + input.charAt(0).toUpperCase() + input.slice(1);
+    searchForm.elements.query.value = '';
+
+    console.log(input.length)
+    if (newResults.Response == "True") {
+        searchElement.style.margin = '0 0 0 0'
+
+        fade(noResults, 0, 'none')
+        fade(headerInfo, 1)
+        arrow.forEach(arr => {
+            fade(arr, 1)
+        })
+
+        fade(sliderContainer, 1, 'flex')
+        displaySliderItems(newResults.Search);
+
+    } else {
+        if (input.length === 0) {
+            noResultsText.innerHTML = `It looks like you forgot to enter a search term. Try searching for a specific topic${errorChange.innerText}`
         } else {
-            fade(noResults, 1, 'auto')
+            noResultsText.innerHTML = `We couldn't find anything for that. Try searching for a specific topic${errorChange.innerText} to get better results.`
         }
+        fade(headerInfo, 0)
+        arrow.forEach(arr => {
+            fade(arr, 0)
+        })
+
+        fade(sliderContainer, 0, 'none')
+
+        fade(noResults, 1, 'flex')
 
     }
-    catch {
-        console.log('request failed')
-    }
+
 
 });
 
@@ -261,9 +282,9 @@ function loadSliderDetails() {
 
         movie.addEventListener('mouseenter', async () => {
             arrow.forEach(arr => fade(arr, 0))
-            const result = await fetch(`http://www.omdbapi.com/?i=${movie.dataset.id}${api_key}${resultType}`)
+            const result = await fetch(`http://www.omdbapi.com/?i=${movie.dataset.id}${api_key}${resultType}&plot=full`)
             const movieInfo = await result.json();
-            console.log(movieInfo)
+
             displaySliderDetails(movieInfo, movie)
         });
         movie.addEventListener('mouseleave', () => {
@@ -352,16 +373,16 @@ function bioClick(info, btn) {
 
 function bioListeners(item, open, close, leave) {
     open.addEventListener('click', () => {
-        fade(item, 1, "100%")
+        fade(item, 1, 'block', "100%")
     })
     close.addEventListener('click', () => {
-        fade(item, 0, 0)
+        fade(item, 0, 'none', 0)
         setTimeout(() => {
             item.scrollTop = 0;
         }, "300")
     })
     leave.addEventListener('mouseleave', () => {
-        fade(item, 0, 0)
+        fade(item, 0, 'none', 0)
         setTimeout(() => {
             item.scrollTop = 0;
         }, "300")
@@ -384,9 +405,9 @@ const brightColorGen = () => {
 }
 
 // function to fade items in
-const fade = (input, opacity, height, display) => {
+const fade = (input, opacity, display, height) => {
     try {
-        if (input.style.display === 'none') {
+        if (input.style.opacity === '' || input.style.opacity === '0') {
             input.style.display = display;
             setTimeout(() => {
                 input.style.opacity = opacity;
@@ -399,7 +420,7 @@ const fade = (input, opacity, height, display) => {
 
             setTimeout(() => {
                 input.style.display = display;
-            }, "100")
+            }, "300")
         }
     }
     catch {
