@@ -19,11 +19,9 @@
 <body>
     <!-- main section -->
     <section class="main-container vh-100 w-100">
-
         <!-- search section -->
         <div class="search-element">
             <h1> <span class="title-change">Movie</span> Search</h1>
-            
             <ul id="result-type-container">
                 <li class="movie-results active result-btn ">Movies</li>
                 <li class="tv-results result-btn">Tv</li>
@@ -33,13 +31,8 @@
                 <input type="text" class="form-control" placeholder="Movie Title..." autocomplete="off" name="query"
                     id="search-input" onkeyup="findMovies()" onclick="findMovies()">
                 <button>Search</button>
-
             </form>
-
             <div class="search-list" id="search-list"></div>
-
-
-
         </div>
 
         <!-- subheader section -->
@@ -58,9 +51,7 @@
 
         <!-- modal section -->
         <div class="container-fluid" id="modal">
-
         </div>
-
 
         <!-- slider section -->
         <div class="slider-container  ">
@@ -74,22 +65,11 @@
         </div>
 
         <!-- message if results didn't come up with anything -->
-
         <div class="no-results">
-
             <h3 class="no-results-text">It looks like you forgot to enter a search term. Try searching for a specific topic<span id='error-change'> or movie</span>  to get results.
             </h3>
-          
-
         </div>
-
-
-
     </section>
-
-
-
-
 
     <!-- js -->
     <script src="app.js"></script>

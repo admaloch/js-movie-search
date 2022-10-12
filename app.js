@@ -125,6 +125,7 @@ function displayMovieList(movies) {
     }
     loadMovieDetails()
     loadSliderDetails()
+
 }
 
 function loadMovieDetails() {
@@ -138,6 +139,7 @@ function loadMovieDetails() {
             const movieDetails = await result.json();
 
             displayMovieDetails(movieDetails);
+            
         })
     })
 }
@@ -235,10 +237,12 @@ searchForm.addEventListener('submit', async function (e) {
 
 // add search results to page as slider on submit
 const displaySliderItems = (input) => {
+
     slider.innerHTML = ''
     for (let i = 0; i <= input.length; i++) {
         let movieContainer = document.createElement('div');
         movieContainer.dataset.id = input[i].imdbID;
+        // console.log(movieContainer.dataset.id)
         movieContainer.classList.add('movie-container')
         if (input[i].Poster != "N/A")
             imageMovie = input[i].Poster;
@@ -249,6 +253,7 @@ const displaySliderItems = (input) => {
         `
         slider.appendChild(movieContainer)
     }
+    
 }
 
 // grab imbd ID of each movie and send another request for more info
@@ -280,6 +285,7 @@ function removeItems() {
 
 const displaySliderDetails = (input, item) => {
     // add hover items
+    console.log(input)
     const infoContainer = document.createElement('div')
     infoContainer.classList.add('info-container')
     const title = document.createElement('h3')

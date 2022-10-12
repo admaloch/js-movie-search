@@ -613,7 +613,7 @@ body {
 
 .arrow {
     font-size: 8rem;
-    transition: transform 150ms ease-in-out;
+    transition: transform 300ms ease-in-out;
     height: 100%;
     display: flex;
     align-items: center;
