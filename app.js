@@ -1,10 +1,6 @@
 // tmbd api key = 025781367a111a39acbfd9121bed34f28
 // ex.requst = https://api.themoviedb.org/3/movie/550?api_key=025781367a111a39abfd9121bed34f28
 
-// variables for api request
-const api_key = '&apikey=84200d7a'
-let resultType = '&type=movie'
-
 // determine if the results are movies or shows
 const movieBtn = document.querySelector('.movie-results')
 const tvBtn = document.querySelector('.tv-results')
@@ -24,18 +20,61 @@ const errorChange = document.getElementById('error-change');
 const headerInfo = document.querySelector('.header-info');
 const sliderContainer = document.querySelector('.slider-container');
 const arrow = document.querySelectorAll('.handle');
-
 const searchQueryText = document.querySelector('.changing-word');
-
 const searchElement = document.querySelector('.search-element');
-// searchElement.style.margin = '8rem 0 0 0'
-
 const btns = document.querySelectorAll('.result-btn')
 
+const root = document.querySelector(':root');
+
+
+// change margin on initial load
 window.onload = function () {
     searchElement.style.margin = '8rem 0 0 0'
 };
 
+// object containing different color scheme variables for movie/tv/both
+const colorSchemes = {
+    movieScheme: {
+        '--text': '#f8f7ff', //white
+        '--mainBackground': '#022B3A', //dark blue
+        '--containertext': '#022B3A', //dark blue
+        '--containerBackground': '#f8f7ff',  //white
+        '--color1': '#ff99c8', //pink
+        '--color2': '#d0f4de', //green
+        '--color3': '#fdfcdc', //light yellow
+        '--overlay': 'rgba(248, 247, 255, .8)',
+    },
+    tvScheme: {
+        '--text': '#022B3A',  //dark blue
+        '--mainBackground': '#f7ede2', //cream
+        '--containertext': '#f7ede2', //cream
+        '--containerBackground': '#022B3A',//dark blue
+        '--color1': '#ee4266', //light blue
+        '--color2': '#03045e', //purple
+        '--color3': '#1F7A8C',  //teal
+        '--overlay': 'rgba(2, 43, 58, .8)',
+    },
+
+    bothScheme: {
+        '--text': '#284b63',  //dark blue
+        '--mainBackground': '#cbc0d3', //light purple
+        '--containertext': '#cbc0d3', //light purple
+        '--containerBackground': '#284b63',//dark blue
+        '--color1': '#192bc2', //light red
+        '--color2': '#9e2a2b', //dark green
+        '--color3': '#4b3f72',  //cream
+        '--overlay': 'rgba(2, 43, 58, .8)',
+    },
+
+
+
+}
+
+// function to change color schemes
+const changeColorVars = vars => Object.entries(vars)
+    .forEach(v => root.style.setProperty(v[0], v[1]));
+
+// result buttons change type of requests from movie to tv and change color scheme
 for (let i = 0; i < btns.length; i++) {
     btns[i].addEventListener("click", function () {
         // change active class on button clickl
@@ -55,29 +94,42 @@ for (let i = 0; i < btns.length; i++) {
 
 function changeResults(input) {
     if (input.innerText === 'Movies') {
+        changeColorVars(colorSchemes.movieScheme)
         resultType = '&type=movie'
         fade(noResults, 0, 'none')
         changingTitle.innerText = 'Movie'
         changingSubTitle.innerText = 'Movies'
         errorChange.innerText = ' or movie'
+
+
     }
     if (input.innerText === 'Tv') {
+        changeColorVars(colorSchemes.tvScheme)
         resultType = '&type=series'
         fade(noResults, 0, 'none')
         changingTitle.innerText = 'TV Show'
         changingSubTitle.innerText = 'Tv shows'
         errorChange.innerText = ' or tv show'
+
     }
     if (input.innerText === 'Both') {
+        changeColorVars(colorSchemes.bothScheme)
         resultType = '&type='
         fade(noResults, 0, 'none')
         changingTitle.innerText = 'Movie + TV Show'
         changingSubTitle.innerText = 'Movies and Tv shows'
         errorChange.innerText = ', movie or tv show'
+
     }
 }
 
 
+
+
+
+// variables for api request
+const api_key = '&apikey=84200d7a'
+let resultType = '&type=movie'
 
 // submit handler.. capture input and send request to api and add images
 // load movies from api
@@ -139,7 +191,7 @@ function loadMovieDetails() {
             const movieDetails = await result.json();
 
             displayMovieDetails(movieDetails);
-            
+
         })
     })
 }
@@ -156,10 +208,10 @@ function displayMovieDetails(details) {
                     alt="movie poster">
             </div>
             <div class="movie-info">
-                <h3 class="movie-title">${details.Title}</h3>
+                <h3 class="movie-info-title">${details.Title}</h3>
                 <ul class="movie-misc-info">
-                    <li class="year"> <span>Runtime:</span> ${details.Runtime}-</li>
-                    <li class="rated"> <span>Rated:</span> ${details.Rated}-</li>
+                    <li class="year"> <span>Runtime:</span> ${details.Runtime} -</li>
+                    <li class="rated"> <span>Rated:</span> ${details.Rated} -</li>
                     <li class="released"> <span>Released:</span> ${details.Released.split(' ').pop()}</li>
                 </ul>
                 <p class="genre"><span>Genre:</span> ${details.Genre}</p>
@@ -169,7 +221,7 @@ function displayMovieDetails(details) {
                 <p class="language"><span>Language:</span> ${details.Language}</p>
                 <div class="modal-buttons">
                     <button class="modal-btn" id="btn-close">Close</button>
-                    <a class="modal-btn" href="https://www.google.com/search?q=${details.Title}" target="_blank">
+                    <a class="modal-btn" href="https://www.google.com/search?q=${details.Title}+${details.Released.split(' ').pop()}" target="_blank">
                     <div>Search</div>
                 </a>
 
@@ -253,7 +305,7 @@ const displaySliderItems = (input) => {
         `
         slider.appendChild(movieContainer)
     }
-    
+
 }
 
 // grab imbd ID of each movie and send another request for more info
@@ -292,9 +344,9 @@ const displaySliderDetails = (input, item) => {
     title.innerText = input.Title
     title.classList.add('movie-title')
 
-    title.innerText.split(' ').length > 10
-        ? title.style.fontSize = '.8rem'
-        : title.style.fontSize = '1.5rem';
+    if (title.innerText.split(' ').length > 6) {title.style.fontSize = '1.3rem'}
+    if (title.innerText.split(' ').length > 10) {title.style.fontSize = '.8rem'}
+        
 
     const directed = document.createElement('h4')
     directed.innerText = `Directed by: ${input.Director} `
