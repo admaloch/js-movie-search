@@ -4,6 +4,8 @@
     box-sizing: border-box;
 }
 
+
+
 /* * {
     border: red solid 2px;
 } */
@@ -49,16 +51,16 @@ html {
 :root {
     --slider-padding: 5rem;
 }
-/* :root {
-    --text: #022B3A;
-    --mainBackground: #ffffff;
+:root {
+    --text: #f8f7ff;
+    --mainBackground: #022B3A;
     --containertext: #022B3A;
-    --containerBackground: #ffffff;
-    --color1: #E1E5F2;
-    --color2: #03045e;
-    --color3: #1F7A8C;
+    --containerBackground: #f8f7ff;
+    --color1: #ff99c8;
+    --color2: #d0f4de;
+    --color3: #fdfcdc;
     --overlay: rgba(225, 229, 242, 0.73);
-  }   */
+  }  
 
 
 
@@ -76,14 +78,15 @@ body {
 /* main section */
 
 .main-container {
-    width: 90%;
-
+   
+height: 100vh;
     display: flex;
-
+width: 100%;
     margin-top: 9.5rem;
 
     flex-direction: column;
     align-items: center;
+    
     position: relative;
 
 
@@ -91,12 +94,11 @@ body {
 
 /* search section  */
 .search-element {
-    display: -webkit-box;
-    display: -ms-flexbox;
+    border: red solid 2px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    min-width: 500px;
+    
     position: relative;
     width: 100%;
     transition: 500ms ease-in-out;
@@ -469,7 +471,7 @@ border: var(--text) solid 5px;
 }
 
 .movie-title {
-    font-size: 2rem;
+    font-size: 1.4rem;
     color: var(--color2);
     margin-bottom: 1rem;
     text-align: center;
@@ -698,23 +700,43 @@ color: var(--mainBackground);
 }
 
 
+/* bootstrap Breakpoints
+X-Small	None	<576px
+Small	sm	≥576px
+Medium	md	≥768px
+Large	lg	≥992px
+Extra large	xl	≥1200px
+Extra extra large	xxl	≥1400px */
+@media screen and (max-width: 1500px) {
+    .movie-container img {aspect-ratio: 16/20;}
+}
+
+@media screen and (max-width: 1400px) {
+    :root {font-size: 13px;} 
+    .header-info {margin-top: 3rem;}
+    .slider-container {margin-top: 4rem;}
+}
 
 @media screen and (max-width: 1200px) {
-    .slider {
-        --images-per-screen: 4;
-    }
-
-    .search-element form {
-        margin: 4%;
-    }
+    .slider {--images-per-screen: 4;}
+    .movie-container img {aspect-ratio: 16/20;}
 }
 
 @media screen and (max-width: 992px) {
+  :root {font-size: 12px;} 
+  .movie-container img {aspect-ratio: 16/27;}
+}
+
+@media screen and (max-width: 768px) {
+    .slider {--images-per-screen: 3;}
+    :root {font-size: 11px;} 
+}
+
+@media screen and (max-width: 576px) {
     .slider {
         --images-per-screen: 3;
     }
-
-    .title {
-        font-size: 1.3rem;
-    }
+    :root {
+        font-size: 10px;
+    } 
 }

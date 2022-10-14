@@ -60,10 +60,10 @@ const colorSchemes = {
         '--mainBackground': '#cbc0d3', //light purple
         '--containertext': '#cbc0d3', //light purple
         '--containerBackground': '#284b63',//dark blue
-        '--color1': '#192bc2', //light red
-        '--color2': '#9e2a2b', //dark green
-        '--color3': '#4b3f72',  //cream
-        '--overlay': 'rgba(2, 43, 58, .8)',
+        '--color1': '#fff3b0', //light green
+        '--color2': '#023e8a', //dark blue
+        '--color3': '#1b4332',  //light yellow
+        '--overlay': 'rgba(40, 75, 99, .8)',
     },
 
 
@@ -344,9 +344,9 @@ const displaySliderDetails = (input, item) => {
     title.innerText = input.Title
     title.classList.add('movie-title')
 
-    if (title.innerText.split(' ').length > 6) {title.style.fontSize = '1.3rem'}
+    if (title.innerText.split(' ').length > 6) {title.style.fontSize = '1.2rem'}
     if (title.innerText.split(' ').length > 10) {title.style.fontSize = '.8rem'}
-        
+    if (title.innerText.split(' ').length > 13) {title.style.fontSize = '.7rem'}
 
     const directed = document.createElement('h4')
     directed.innerText = `Directed by: ${input.Director} `
