@@ -210,8 +210,8 @@ function displayMovieDetails(details) {
             <div class="movie-info">
                 <h3 class="movie-info-title">${details.Title}</h3>
                 <ul class="movie-misc-info">
-                    <li class="year"> <span>Runtime:</span> ${details.Runtime} -</li>
-                    <li class="rated"> <span>Rated:</span> ${details.Rated} -</li>
+                    <li class="year"> <span>Runtime:</span> ${details.Runtime} </li>
+                    <li class="rated"> <span>Rated:</span> ${details.Rated} </li>
                     <li class="released"> <span>Released:</span> ${details.Released.split(' ').pop()}</li>
                 </ul>
                 <p class="genre"><span>Genre:</span> ${details.Genre}</p>
@@ -345,8 +345,8 @@ const displaySliderDetails = (input, item) => {
     title.classList.add('movie-title')
 
     if (title.innerText.split(' ').length > 6) {title.style.fontSize = '1.2rem'}
-    if (title.innerText.split(' ').length > 10) {title.style.fontSize = '.8rem'}
-    if (title.innerText.split(' ').length > 13) {title.style.fontSize = '.7rem'}
+    if (title.innerText.split(' ').length > 10) {title.style.fontSize = '.9rem'}
+    if (title.innerText.split(' ').length > 13) {title.style.fontSize = '.8rem'}
 
     const directed = document.createElement('h4')
     directed.innerText = `Directed by: ${input.Director} `
