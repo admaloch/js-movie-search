@@ -32,7 +32,7 @@ window.onload = function () {
     searchElement.style.margin = '8rem 0 0 0'
 };
 
-// object containing different color scheme variables for movie/tv/both
+// object containing different color scheme css variables
 const colorSchemes = {
     movieScheme: {
         '--text': '#f8f7ff', //white
@@ -70,7 +70,7 @@ const colorSchemes = {
 
 }
 
-// function to change color schemes
+// function to change color schemes from css variables ^
 const changeColorVars = vars => Object.entries(vars)
     .forEach(v => root.style.setProperty(v[0], v[1]));
 
@@ -82,7 +82,6 @@ for (let i = 0; i < btns.length; i++) {
         current[0].className = current[0].className.replace(" active", "");
         this.className += " active";
         // fade out items
-
         fade(sliderContainer, 0, 'none')
         fade(headerInfo, 0)
         fade(arrow, 0)
@@ -100,8 +99,6 @@ function changeResults(input) {
         changingTitle.innerText = 'Movie'
         changingSubTitle.innerText = 'Movies'
         errorChange.innerText = ' or movie'
-
-
     }
     if (input.innerText === 'Tv') {
         changeColorVars(colorSchemes.tvScheme)
@@ -124,14 +121,11 @@ function changeResults(input) {
 }
 
 
-
-
-
 // variables for api request
 const api_key = '&apikey=84200d7a'
 let resultType = '&type=movie'
 
-// submit handler.. capture input and send request to api and add images
+// api request to generate movie/tv list on keydown
 // load movies from api
 async function loadMovies(searchTerm) {
     const URL = `https://omdbapi.com/?s=${searchTerm}&page=1${api_key}${resultType}`;
@@ -160,10 +154,8 @@ function displayMovieList(movies) {
         let movieListItem = document.createElement('div');
         movieListItem.dataset.id = movies[i].imdbID; // setting movie id in  data-id
         movieListItem.classList.add('search-list-item');
-        if (movies[i].Poster != "N/A")
-            moviePoster = movies[i].Poster;
-        else
-            moviePoster = "image_not_found.png";
+        if (movies[i].Poster != "N/A") { moviePoster = movies[i].Poster }
+        else { moviePoster = "image_not_found.png" };
         movieListItem.innerHTML = `
         <div class = "search-item-thumbnail">
             <img src = "${moviePoster}">
@@ -189,9 +181,7 @@ function loadMovieDetails() {
             searchInput.value = '';
             const result = await fetch(`http://www.omdbapi.com/?i=${movie.dataset.id}${api_key}${resultType}&plot=full`)
             const movieDetails = await result.json();
-
             displayMovieDetails(movieDetails);
-
         })
     })
 }
@@ -200,37 +190,37 @@ const modal = document.getElementById('modal');
 function displayMovieDetails(details) {
     fade(modal, 1, 'flex')
     modal.innerHTML = `
-<div class="overlay">
-    <div class="result-container">
-        <div class="movie-info-container">
-            <div class="movie-poster">
-                <img src="${(details.Poster != " N/A") ? details.Poster : "image_not_found.png"}"
-                    alt="movie poster">
-            </div>
-            <div class="movie-info">
-                <h3 class="movie-info-title">${details.Title}</h3>
-                <ul class="movie-misc-info">
-                    <li class="year"> <span>Runtime:</span> ${details.Runtime} </li>
-                    <li class="rated"> <span>Rated:</span> ${details.Rated} </li>
-                    <li class="released"> <span>Released:</span> ${details.Released.split(' ').pop()}</li>
-                </ul>
-                <p class="genre"><span>Genre:</span> ${details.Genre}</p>
-                <p class="writer"><span>Director:</span> ${details.Director}</p>
-                <p class="actors"><span>Actors: </span>${details.Actors}</p>
-                <p class="plot"><span>Plot:</span> ${details.Plot}</p>
-                <p class="language"><span>Language:</span> ${details.Language}</p>
-                <div class="modal-buttons">
-                    <button class="modal-btn" id="btn-close">Close</button>
-                    <a class="modal-btn" href="https://www.google.com/search?q=${details.Title}+${details.Released.split(' ').pop()}" target="_blank">
-                    <div>Search</div>
-                </a>
+            <div class="overlay">
+                <div class="result-container">
+                    <div class="movie-info-container">
+                        <div class="movie-poster">
+                            <img src="${(details.Poster != " N/A") ? details.Poster : "image_not_found.png"}"
+                                alt="movie poster">
+                        </div>
+                        <div class="movie-info">
+                            <h3 class="movie-info-title">${details.Title}</h3>
+                            <ul class="movie-misc-info">
+                                <li class="year"> <span>Runtime:</span> ${details.Runtime} </li>
+                                <li class="rated"> <span>Rated:</span> ${details.Rated} </li>
+                                <li class="released"> <span>Released:</span> ${details.Released.split(' ').pop()}</li>
+                            </ul>
+                            <p class="genre"><span>Genre:</span> ${details.Genre}</p>
+                            <p class="writer"><span>Director:</span> ${details.Director}</p>
+                            <p class="actors"><span>Actors: </span>${details.Actors}</p>
+                            <p class="plot"><span>Plot:</span> ${details.Plot}</p>
+                            <p class="language"><span>Language:</span> ${details.Language}</p>
+                            <div class="modal-buttons">
+                                <button class="modal-btn" id="btn-close">Close</button>
+                                <a class="modal-btn" href="https://www.google.com/search?q=${details.Title}+${details.Released.split(' ').pop()}" target="_blank">
+                                <div>Search</div>
+                            </a>
 
+                            </div>
+
+                        </div>
+                    </div>
                 </div>
-
-            </div>
-        </div>
-    </div>
-</div>       
+            </div>       
     `;
 
     const btnClose = document.getElementById('btn-close');
@@ -289,22 +279,24 @@ searchForm.addEventListener('submit', async function (e) {
 
 // add search results to page as slider on submit
 const displaySliderItems = (input) => {
-
-    slider.innerHTML = ''
-    for (let i = 0; i <= input.length; i++) {
-        let movieContainer = document.createElement('div');
-        movieContainer.dataset.id = input[i].imdbID;
-        // console.log(movieContainer.dataset.id)
-        movieContainer.classList.add('movie-container')
-        if (input[i].Poster != "N/A")
-            imageMovie = input[i].Poster;
-        else
-            imageMovie = "image_not_found.png";
-        movieContainer.innerHTML = `
+    try {
+        slider.innerHTML = ''
+        for (let i = 0; i <= input.length; i++) {
+            let movieContainer = document.createElement('div');
+            movieContainer.dataset.id = input[i].imdbID;
+            // console.log(movieContainer.dataset.id)
+            movieContainer.classList.add('movie-container')
+            if (input[i].Poster != "N/A")
+                imageMovie = input[i].Poster;
+            else
+                imageMovie = "image_not_found.png";
+            movieContainer.innerHTML = `
         <img src="${imageMovie}" alt="movie image">
         `
-        slider.appendChild(movieContainer)
+            slider.appendChild(movieContainer)
+        }
     }
+    catch { }
 
 }
 
@@ -336,82 +328,55 @@ function removeItems() {
 }
 
 const displaySliderDetails = (input, item) => {
-    // add hover items
-    console.log(input)
+    // add movie container items that appear on hover
     const infoContainer = document.createElement('div')
-    infoContainer.classList.add('info-container')
+    appendItem(infoContainer, '', item, 'info-container')
     const title = document.createElement('h3')
-    title.innerText = input.Title
-    title.classList.add('movie-title')
-
-    if (title.innerText.split(' ').length > 6) {title.style.fontSize = '1.2rem'}
-    if (title.innerText.split(' ').length > 10) {title.style.fontSize = '.9rem'}
-    if (title.innerText.split(' ').length > 13) {title.style.fontSize = '.8rem'}
-
+    appendItem(title, input.Title, infoContainer, 'movie-title')
+    titleTest(title)
     const directed = document.createElement('h4')
-    directed.innerText = `Directed by: ${input.Director} `
+    appendItem(directed, `Directed by: ${input.Director}`, infoContainer)
     const released = document.createElement('h4')
-    released.innerText = `Released: ${input.Released.split(' ').pop()} `
+    appendItem(released, `Released: ${input.Released.split(' ').pop()}`, infoContainer)
     const rating = document.createElement('h4')
-    rating.innerText = `Rated: ${input.Rated} `
-    const score = document.createElement('h4')
+    appendItem(rating, `Rated: ${input.Rated}`, infoContainer)
     const media = document.createElement('h4')
-    media.innerText = `Type: ${input.Type.charAt(0).toUpperCase() + input.Type.slice(1)} `
-
-    if (!input.Ratings[1]) {
-        scores = `Imdb score: ${input.imdbRating}`
-    } else {
-        scores = `Rotten Tomatoes Score: ${input.Ratings[1].Value}`;
-    }
-
+    const mediaText = `Type: ${input.Type.charAt(0).toUpperCase() + input.Type.slice(1)} `
+    appendItem(media, mediaText, infoContainer)
+    const score = document.createElement('h4')
+    let scores = '';
     !input.Ratings[1] ? scores = `Imdb score: ${input.imdbRating}`
         : scores = `Rotten Tomatoes Score: ${input.Ratings[1].Value}`;
-
-
-    score.innerText = `${scores}`
+    appendItem(score, scores, infoContainer)
     //overview btn-- reveal movie synopsus
     const bioOpen = document.createElement('div')
-    bioOpen.classList.add('hover-btn')
-    bioOpen.innerText = 'Overview'
-
+    appendItem(bioOpen, 'Overview', infoContainer, 'hover-btn')
     //more btn click for modal info
     const moreBtn = document.createElement('div')
-    moreBtn.classList.add('hover-btn')
-    moreBtn.setAttribute("id", "more-btn");
-    moreBtn.innerText = 'More Information'
-
+    appendItem(moreBtn, 'More Information', infoContainer, 'hover-btn')
     // movie synopsus create overlay with text
     const bioOverlay = document.createElement('div')
-    bioOverlay.classList.add('bio-overlay')
+    appendItem(bioOverlay, '', item, 'bio-overlay')
     const bioTitle = document.createElement('h4')
-    bioTitle.innerText = 'Overview'
-    bioOverlay.append(bioTitle)
+    appendItem(bioTitle, 'Overview', bioOverlay)
     const bioText = document.createElement('p')
-    bioOverlay.append(bioText)
-    bioText.innerText = input.Plot
-
+    appendItem(bioText, input.Plot, bioOverlay)
     // close synopsus overlay
     const bioClose = document.createElement('div')
-    bioClose.classList.add('close-bio-text')
-    bioOverlay.append(bioClose)
-
-    infoContainer.append(title, directed, released, rating, score, media, bioOpen, moreBtn)
-    item.append(infoContainer, bioOverlay)
-
+    appendItem(bioClose, '', bioOverlay, 'close-bio-text')
 
     bioListeners(bioOverlay, bioOpen, bioClose, item)
     bioClick(input, moreBtn)
-
 }
 
-function bioClick(info, btn) {
-    btn.addEventListener('click', () => {
-        displayMovieDetails(info)
-    })
+// function to add content/classes to items, test if they have content, and append
+function appendItem(item, text, destination, _class) {
+    item.innerText = text;
+    if (text != 'N/A') { destination.appendChild(item) }
+    item.classList.add(_class)
 }
 
-
-
+// function to open/close the overlay with teh movie bio on overview button
 function bioListeners(item, open, close, leave) {
     open.addEventListener('click', () => {
         fade(item, 1, 'block', "100%")
@@ -430,6 +395,20 @@ function bioListeners(item, open, close, leave) {
     })
 }
 
+// function to display modal when more info button is clicked
+function bioClick(info, btn) {
+    btn.addEventListener('click', () => {
+        displayMovieDetails(info)
+    })
+}
+
+// decrease font size for movies with excessively long titles
+function titleTest(input) {
+    if (input.innerText.split(' ').length > 6) { input.style.fontSize = '1.2rem' }
+    if (input.innerText.split(' ').length > 10) { input.style.fontSize = '.9rem' }
+    if (input.innerText.split(' ').length > 13) { input.style.fontSize = '.8rem' }
+}
+
 // delete previous results if any when new search is submitted
 const button = document.querySelector('button');
 const deleteImg = button.addEventListener('click', () => {
@@ -445,7 +424,7 @@ const brightColorGen = () => {
         (85 + 10 * Math.random()) + '%)'
 }
 
-// function to fade items in
+// general function to fade items in and out
 const fade = (input, opacity, display, height) => {
     try {
         if (input.style.opacity === '' || input.style.opacity === '0') {
@@ -453,20 +432,16 @@ const fade = (input, opacity, display, height) => {
             setTimeout(() => {
                 input.style.opacity = opacity;
                 input.style.height = height;
-
             }, "100")
         } else {
             input.style.opacity = opacity;
             input.style.height = height;
-
             setTimeout(() => {
                 input.style.display = display;
             }, "300")
         }
     }
-    catch {
-
-    }
+    catch { }
 }
 
 // slider arrow  click listener.. 
