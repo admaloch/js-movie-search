@@ -1,33 +1,13 @@
 // tmbd api key = 025781367a111a39acbfd9121bed34f28
 // ex.requst = https://api.themoviedb.org/3/movie/550?api_key=025781367a111a39abfd9121bed34f28
 
-// determine if the results are movies or shows
-const movieBtn = document.querySelector('.movie-results')
-const tvBtn = document.querySelector('.tv-results')
-const allBtn = document.querySelector('.all-results')
-
-// dropdown list api result
-const searchForm = document.querySelector('#searchForm');
-const searchList = document.getElementById('search-list');
-const searchInput = document.getElementById('search-input');
-
-// slider fill variables
-let slider = document.querySelector('.slider');
-let changingTitle = document.querySelector('.title-change');
-let changingSubTitle = document.querySelector('.sub-title-change');
-const changingText = document.querySelector('.changing-word');
-const errorChange = document.getElementById('error-change');
-const headerInfo = document.querySelector('.header-info');
+// items that get faded in and out
 const sliderContainer = document.querySelector('.slider-container');
+const headerInfo = document.querySelector('.header-info');
 const arrow = document.querySelectorAll('.handle');
-const searchQueryText = document.querySelector('.changing-word');
-const searchElement = document.querySelector('.search-element');
-const btns = document.querySelectorAll('.result-btn')
-
-const root = document.querySelector(':root');
-
 
 // change margin on initial load
+const searchElement = document.querySelector('.search-element');
 window.onload = function () {
     searchElement.style.margin = '8rem 0 0 0'
 };
@@ -70,10 +50,13 @@ const colorSchemes = {
 
 }
 
+
 // function to change color schemes from css variables ^
+const root = document.querySelector(':root');
 const changeColorVars = vars => Object.entries(vars)
     .forEach(v => root.style.setProperty(v[0], v[1]));
 
+const btns = document.querySelectorAll('.result-btn')
 // result buttons change type of requests from movie to tv and change color scheme
 for (let i = 0; i < btns.length; i++) {
     btns[i].addEventListener("click", function () {
@@ -91,6 +74,9 @@ for (let i = 0; i < btns.length; i++) {
     });
 }
 
+let changingTitle = document.querySelector('.title-change');
+let changingSubTitle = document.querySelector('.sub-title-change');
+const errorChange = document.getElementById('error-change');
 function changeResults(input) {
     if (input.innerText === 'Movies') {
         changeColorVars(colorSchemes.movieScheme)
@@ -134,6 +120,8 @@ async function loadMovies(searchTerm) {
     if (results.Response == "True") displayMovieList(results.Search);
 }
 
+const searchInput = document.getElementById('search-input');
+const searchList = document.getElementById('search-list');
 // captures value and determines if movielist shows up
 function findMovies() {
     let searchTerm = (searchInput.value).trim();
@@ -210,7 +198,7 @@ function displayMovieDetails(details) {
                             <p class="plot"><span>Plot:</span> ${details.Plot}</p>
                             <p class="language"><span>Language:</span> ${details.Language}</p>
                             <div class="modal-buttons">
-                                <button class="modal-btn" id="btn-close">Close</button>
+                                <button class="modal-btn" id="btn-close">Return to Search</button>
                                 <a class="modal-btn" href="https://www.google.com/search?q=${details.Title}+${details.Released.split(' ').pop()}" target="_blank">
                                 <div>Search</div>
                             </a>
@@ -222,22 +210,20 @@ function displayMovieDetails(details) {
                 </div>
             </div>       
     `;
-
     const btnClose = document.getElementById('btn-close');
     btnClose.addEventListener('click', () => {
         fade(modal, 0, 'none')
     })
 }
-
 window.addEventListener('click', (event) => {
     if (event.target.className != "form-control") {
         fade(searchList, 0, 'none')
     }
 })
-
+const searchForm = document.querySelector('#searchForm');
 const noResults = document.querySelector('.no-results');
 const noResultsText = document.querySelector('.no-results-text');
-
+const changingText = document.querySelector('.changing-word');
 //SLIDER SECTION-------------------------------------------------
 //slider results from general search keyword on submit
 // submit handler.. capture input and send request to api and add images
@@ -277,6 +263,7 @@ searchForm.addEventListener('submit', async function (e) {
     }
 });
 
+let slider = document.querySelector('.slider');
 // add search results to page as slider on submit
 const displaySliderItems = (input) => {
     try {
@@ -297,7 +284,6 @@ const displaySliderItems = (input) => {
         }
     }
     catch { }
-
 }
 
 // grab imbd ID of each movie and send another request for more info
@@ -333,7 +319,8 @@ const displaySliderDetails = (input, item) => {
     appendItem(infoContainer, '', item, 'info-container')
     const title = document.createElement('h3')
     appendItem(title, input.Title, infoContainer, 'movie-title')
-    titleTest(title)
+    titleLengthTest(title)
+
     const directed = document.createElement('h4')
     appendItem(directed, `Directed by: ${input.Director}`, infoContainer)
     const released = document.createElement('h4')
@@ -372,7 +359,7 @@ const displaySliderDetails = (input, item) => {
 // function to add content/classes to items, test if they have content, and append
 function appendItem(item, text, destination, _class) {
     item.innerText = text;
-    if (text != 'N/A') { destination.appendChild(item) }
+    if (!text.includes('N/A')) { destination.appendChild(item) }
     item.classList.add(_class)
 }
 
@@ -403,7 +390,7 @@ function bioClick(info, btn) {
 }
 
 // decrease font size for movies with excessively long titles
-function titleTest(input) {
+function titleLengthTest(input) {
     if (input.innerText.split(' ').length > 6) { input.style.fontSize = '1.2rem' }
     if (input.innerText.split(' ').length > 10) { input.style.fontSize = '.9rem' }
     if (input.innerText.split(' ').length > 13) { input.style.fontSize = '.8rem' }
@@ -467,10 +454,6 @@ function onHandleClick(handle) {
         slider.style.setProperty('--slider-index', sliderIndex + 1)
     }
 }
-
-
-
-
 
 
 

@@ -303,6 +303,10 @@ body {
     color: var(--text);
 }
 
+.movie-info {
+    max-width: 500px;
+}
+
 .movie-poster img {
     padding: 0;
     margin: 0 auto;
@@ -333,9 +337,7 @@ body {
     margin: 0 .3rem;
 }
 
-.movie-info {
-    max-width: 500px;
-}
+
 
 .movie-info-title {
     font-size: 2rem;
@@ -798,7 +800,7 @@ Extra extra large	xxl	≥1400px */
     }
 
     .movie-info {
-        margin-top: 17rem;
+        margin-top: 21rem;
     }
 
     .movie-poster {
