@@ -157,7 +157,7 @@ function displayMovieList(movies) {
         searchList.appendChild(movieListItem);
     }
     loadMovieDetails()
-    loadSliderDetails()
+    
 
 }
 
@@ -276,7 +276,7 @@ const displaySliderItems = (input) => {
         movieContainer.dataset.id = input[i].imdbID;
         slider.appendChild(movieContainer)
     }
-
+    loadSliderDetails()
 }
 
 // grab imbd ID of each movie and send another request for more info
