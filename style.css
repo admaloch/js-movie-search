@@ -292,6 +292,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+
 }
 
 .movie-poster,
@@ -301,16 +302,21 @@ body {
     letter-spacing: .2rem;
     text-align: center;
     color: var(--text);
+
 }
 
 .movie-info {
     max-width: 500px;
 }
 
+
+
 .movie-poster img {
     padding: 0;
     margin: 0 auto;
     border: var(--text) solid 5px;
+
+    max-width: 400px;
 }
 
 
@@ -844,9 +850,10 @@ Extra extra large	xxl	≥1400px */
     .handle {
         display: none;
     }
+
     .result-container {
         width: 100%;
         height: 100vh;
-        
+
     }
 }

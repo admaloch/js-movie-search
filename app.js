@@ -1,17 +1,24 @@
 // tmbd api key = 025781367a111a39acbfd9121bed34f28
 // ex.requst = https://api.themoviedb.org/3/movie/550?api_key=025781367a111a39abfd9121bed34f28
 
-// items that get faded in and out
-let slider = document.querySelector('.slider');
+// variables for keydown searchList
+const searchInput = document.getElementById('search-input');
+const searchList = document.getElementById('search-list');
+
+//error text that changes based on result type
+const errorChange = document.getElementById('error-change');
+
+// variables for slider on form submit
+const slider = document.querySelector('.slider');
 const sliderContainer = document.querySelector('.slider-container');
+const searchElement = document.querySelector('.search-element');
 const headerInfo = document.querySelector('.header-info');
+const noResults = document.querySelector('.no-results');
 const arrow = document.querySelectorAll('.handle');
 
-// change margin on initial load
-const searchElement = document.querySelector('.search-element');
-window.onload = function () {
-    searchElement.style.margin = '8rem 0 0 0'
-};
+// variables for api request
+const api_key = '&apikey=84200d7a'
+let resultType = '&type=movie'
 
 // object containing different color scheme css variables
 const colorSchemes = {
@@ -46,74 +53,93 @@ const colorSchemes = {
         '--color3': '#1b4332',  //light yellow
         '--overlay': 'rgba(40, 75, 99, .8)',
     },
+}
+// object for  info to change color scheme titles based on search query
+const mediaTypes = [
+    Movies = {
+        name: 'Movies',
+        type: '&type=movie',
+        scheme: colorSchemes.movieScheme,
+        title: 'Movie',
+        subTitle: 'Movies',
+        errorMSG: ' or movie'
+    },
+    Tv = {
+        name: 'Tv',
+        type: '&type=series',
+        scheme: colorSchemes.tvScheme,
+        title: 'Tv Show',
+        subTitle: 'Tv shows',
+        errorMSG: ' or tv show'
+    },
+    Both = {
+        name: 'Both',
+        type: '&type=',
+        scheme: colorSchemes.bothScheme,
+        title: 'Movie + TV Show',
+        subTitle: 'Movies and Tv shows',
+        errorMSG: ', movie or tv show'
+    }
+]
 
+// change margin on initial load to make transition from center to top smooth
+window.onload = function () {
+    searchElement.style.margin = '8rem 0 0 0'
+};
 
+// result type buttons click change type of requests from movie to tv and change colors
+function changeTheme() {
+    const btns = document.querySelectorAll('.result-btn')
+    for (let i = 0; i < btns.length; i++) {
+        btns[i].addEventListener("click", function () {
+            // change active class on button clickl
+            let current = document.getElementsByClassName("active");
+            current[0].className = current[0].className.replace(" active", "");
+            this.className += " active";
+            // fade out items
+            fade(sliderContainer, 0, 'none')
+            fade(headerInfo, 0)
+            fade(arrow, 0)
+            searchElement.style.margin = '8rem 0 0 0'
+            // change result type variable
+            changeMedia(btns[i])
+        });
+    }
+}
+changeTheme()
 
+function changeMedia(resultBtn) {
+    let changingTitle = document.querySelector('.title-change');
+    let changingSubTitle = document.querySelector('.sub-title-change');
+
+    mediaTypes.forEach(media => {
+        if (resultBtn.innerText === media.name) {
+            changeColorVars(media.scheme)
+            resultType = media.type;
+            fade(noResults, 0, 'none')
+            changingTitle.innerText = media.title
+            changingSubTitle.innerText = media.subTitle
+            errorChange.innerText = media.errorMSG
+        }
+    })
 }
 
-
-// function to change color schemes from css variables ^
+// function to change color schemes from color schemes object
 const root = document.querySelector(':root');
 const changeColorVars = vars => Object.entries(vars)
     .forEach(v => root.style.setProperty(v[0], v[1]));
 
-const btns = document.querySelectorAll('.result-btn')
-// result buttons change type of requests from movie to tv and change color scheme
-for (let i = 0; i < btns.length; i++) {
-    btns[i].addEventListener("click", function () {
-        // change active class on button clickl
-        let current = document.getElementsByClassName("active");
-        current[0].className = current[0].className.replace(" active", "");
-        this.className += " active";
-        // fade out items
-        fade(sliderContainer, 0, 'none')
-        fade(headerInfo, 0)
-        fade(arrow, 0)
-        searchElement.style.margin = '8rem 0 0 0'
-        // change result type variable
-        changeResults(btns[i])
-    });
+// captures value and determines if movielist shows up
+function findMovies() {
+    let searchTerm = (searchInput.value).trim();
+    if (searchTerm.length > 0) {
+        fade(searchList, 1, 'flex')
+        searchList.scrollTop = 0
+        loadMovies(searchTerm);
+    } else { fade(searchList, 0, 'none') }
 }
-
-let changingTitle = document.querySelector('.title-change');
-let changingSubTitle = document.querySelector('.sub-title-change');
-const errorChange = document.getElementById('error-change');
-function changeResults(input) {
-    if (input.innerText === 'Movies') {
-        changeColorVars(colorSchemes.movieScheme)
-        resultType = '&type=movie'
-        fade(noResults, 0, 'none')
-        changingTitle.innerText = 'Movie'
-        changingSubTitle.innerText = 'Movies'
-        errorChange.innerText = ' or movie'
-    }
-    if (input.innerText === 'Tv') {
-        changeColorVars(colorSchemes.tvScheme)
-        resultType = '&type=series'
-        fade(noResults, 0, 'none')
-        changingTitle.innerText = 'TV Show'
-        changingSubTitle.innerText = 'Tv shows'
-        errorChange.innerText = ' or tv show'
-
-    }
-    if (input.innerText === 'Both') {
-        changeColorVars(colorSchemes.bothScheme)
-        resultType = '&type='
-        fade(noResults, 0, 'none')
-        changingTitle.innerText = 'Movie + TV Show'
-        changingSubTitle.innerText = 'Movies and Tv shows'
-        errorChange.innerText = ', movie or tv show'
-
-    }
-}
-
-
-// variables for api request
-const api_key = '&apikey=84200d7a'
-let resultType = '&type=movie'
 
 // api request to generate movie/tv list on keydown
-// load movies from api
 async function loadMovies(searchTerm) {
     const URL = `https://omdbapi.com/?s=${searchTerm}&page=1${api_key}${resultType}`;
     const res = await fetch(`${URL}`);
@@ -121,20 +147,8 @@ async function loadMovies(searchTerm) {
     if (results.Response == "True") displayMovieList(results.Search);
 }
 
-const searchInput = document.getElementById('search-input');
-const searchList = document.getElementById('search-list');
-// captures value and determines if movielist shows up
-function findMovies() {
-    let searchTerm = (searchInput.value).trim();
 
-    if (searchTerm.length > 0) {
-        fade(searchList, 1, 'flex')
-        searchList.scrollTop = 0
-        loadMovies(searchTerm);
-    } else {
-        fade(searchList, 0, 'none')
-    }
-}
+
 
 // add searchlist items
 function displayMovieList(movies) {
@@ -157,8 +171,7 @@ function displayMovieList(movies) {
         searchList.appendChild(movieListItem);
     }
     loadMovieDetails()
-    
-
+    loadSliderDetails()
 }
 
 function loadMovieDetails() {
@@ -216,39 +229,43 @@ function displayMovieDetails(details) {
         fade(modal, 0, 'none')
     })
 }
+
+// make api list disapear when click off input
 window.addEventListener('click', (event) => {
     if (event.target.className != "form-control") {
         fade(searchList, 0, 'none')
     }
 })
 
-const searchForm = document.querySelector('#searchForm');
-const noResults = document.querySelector('.no-results');
-const noResultsText = document.querySelector('.no-results-text');
-const changingText = document.querySelector('.changing-word');
 //SLIDER SECTION-------------------------------------------------
-//slider results from general search keyword on submit
-// submit handler.. capture input and send request to api and add images
+//create slider of images with info on request
+
+
 
 searchForm.addEventListener('submit', async function (e) {
     e.preventDefault();
-    fade(searchList, 0, 'none')
-
+    const searchForm = document.querySelector('#searchForm');
+    const changingText = document.querySelector('.changing-word');
     let input = searchForm.elements.query.value;
     const URL = `https://omdbapi.com/?s=${input}&page=1${api_key}${resultType}`;
     const res = await fetch(`${URL}`);
-    const newResults = await res.json();
-    changingText.style.color = randomColorGen();
-    changingText.innerText = ' ' + input.charAt(0).toUpperCase() + input.slice(1);
+    const results = await res.json();
     searchForm.elements.query.value = '';
+    changingText.innerText = ' ' + input.charAt(0).toUpperCase() + input.slice(1);
+    changingText.style.color = randomColorGen();
+    onSubmit(results)
+});
 
-    if (newResults.Response == "True") {
+function onSubmit(results) {
+    const noResultsText = document.querySelector('.no-results-text');
+    if (results.Response == "True") {
+        fade(searchList, 0, 'none')
         searchElement.style.margin = '0 0 0 0'
         fade(noResults, 0, 'none')
         fade(headerInfo, 1)
         arrow.forEach(arr => fade(arr, 1))
         fade(sliderContainer, 1, 'flex')
-        displaySliderItems(newResults.Search);
+        displaySliderItems(results.Search);
     } else {
         input.length === 0
             ? noResultsText.innerHTML = `It looks like you forgot to enter a search term. Try searching for a specific topic${errorChange.innerText}`
@@ -258,25 +275,20 @@ searchForm.addEventListener('submit', async function (e) {
         fade(sliderContainer, 0, 'none')
         fade(noResults, 1, 'flex')
     }
-});
-
+}
 
 // add search results to page as slider on submit
 const displaySliderItems = (input) => {
-
     slider.innerHTML = ''
     for (let i = 0; i <= input.length; i++) {
         let movieContainer = document.createElement('div');
         movieContainer.classList.add('movie-container')
         input[i].Poster != "N/A" ? imageMovie = input[i].Poster
             : imageMovie = "image_not_found.png"
-        movieContainer.innerHTML = `
-            <img src="${imageMovie}" alt="movie image">
-            `
+        movieContainer.innerHTML = `<img src="${imageMovie}" alt="movie image">`
         movieContainer.dataset.id = input[i].imdbID;
         slider.appendChild(movieContainer)
     }
-    loadSliderDetails()
 }
 
 // grab imbd ID of each movie and send another request for more info
@@ -284,10 +296,10 @@ function loadSliderDetails() {
     let movieContainer = slider.querySelectorAll('.movie-container')
     movieContainer.forEach(movie => {
         movie.addEventListener('mouseenter', async (e) => {
-            
             e.stopPropagation()
             arrow.forEach(arr => fade(arr, 0))
-            const result = await fetch(`http://www.omdbapi.com/?i=${movie.dataset.id}${api_key}${resultType}&plot=full`)
+            const movieId = movie.dataset.id;
+            const result = await fetch(`http://www.omdbapi.com/?i=${movieId}${api_key}${resultType}&plot=full`)
             const movieInfo = await result.json();
             displaySliderDetails(movieInfo, movie)
         });
@@ -316,7 +328,6 @@ const displaySliderDetails = (input, item) => {
     const title = document.createElement('h3')
     appendItem(title, input.Title, infoContainer, 'movie-title')
     titleLengthTest(title)
-
     const directed = document.createElement('h4')
     appendItem(directed, `Directed by: ${input.Director}`, infoContainer)
     const released = document.createElement('h4')
@@ -347,19 +358,18 @@ const displaySliderDetails = (input, item) => {
     // close synopsus overlay
     const bioClose = document.createElement('div')
     appendItem(bioClose, '', bioOverlay, 'close-bio-text')
-
     bioListeners(bioOverlay, bioOpen, bioClose, item)
     bioClick(input, moreBtn)
 }
 
-// function to add content/classes to items, test if they have content, and append
+// add content/classes to api results, test if content is available, and append
 function appendItem(item, text, destination, _class) {
     item.innerText = text;
     if (!text.includes('N/A')) { destination.appendChild(item) }
     item.classList.add(_class)
 }
 
-// function to open/close the overlay with teh movie bio on overview button
+// function to open/close the overlay with the movie bio on overview button
 function bioListeners(item, open, close, leave) {
     open.addEventListener('click', () => {
         fade(item, 1, 'block', "100%")
@@ -395,9 +405,7 @@ function titleLengthTest(input) {
 // delete previous results when new search is submitted
 const button = document.querySelector('button');
 const deleteImg = button.addEventListener('click', () => {
-    while (slider.firstChild) {
-        slider.removeChild(slider.lastChild);
-    }
+    while (slider.firstChild) slider.removeChild(slider.lastChild)
 })
 
 // function to generate light or dark colors based on color scheme
@@ -413,22 +421,21 @@ const randomColorGen = () => {
 
 // general function to fade items in and out
 const fade = (input, opacity, display, height) => {
-try {
-     if (input.style.opacity === '' || input.style.opacity === '0') {
-        input.style.display = display;
-        setTimeout(() => {
+    try {
+        if (input.style.opacity === '' || input.style.opacity === '0') {
+            input.style.display = display;
+            setTimeout(() => {
+                input.style.opacity = opacity;
+                input.style.height = height;
+            }, "100")
+        } else {
             input.style.opacity = opacity;
             input.style.height = height;
-        }, "100")
-    } else {
-        input.style.opacity = opacity;
-        input.style.height = height;
-        setTimeout(() => {
-            input.style.display = display;
-        }, "300")
-    }
-}
-catch{}
+            setTimeout(() => {
+                input.style.display = display;
+            }, "300")
+        }
+    } catch { }
 }
 
 // slider arrow  click listener.. 
@@ -438,8 +445,7 @@ document.addEventListener('click', e => {
         handle = e.target;
     } else {
         handle = e.target.closest('.handle');
-    }
-    if (handle != null) {
+    } if (handle != null) {
         onHandleClick(handle)
     }
 })
@@ -449,8 +455,7 @@ function onHandleClick(handle) {
     const sliderIndex = parseInt(getComputedStyle(slider).getPropertyValue('--slider-index'));
     if (handle.classList.contains('left-handle')) {
         slider.style.setProperty('--slider-index', sliderIndex - 1)
-    }
-    if (handle.classList.contains('right-handle')) {
+    } if (handle.classList.contains('right-handle')) {
         slider.style.setProperty('--slider-index', sliderIndex + 1)
     }
 }
