@@ -2,6 +2,7 @@
 // ex.requst = https://api.themoviedb.org/3/movie/550?api_key=025781367a111a39abfd9121bed34f28
 
 // items that get faded in and out
+let slider = document.querySelector('.slider');
 const sliderContainer = document.querySelector('.slider-container');
 const headerInfo = document.querySelector('.header-info');
 const arrow = document.querySelectorAll('.handle');
@@ -182,7 +183,7 @@ function displayMovieDetails(details) {
                 <div class="result-container">
                     <div class="movie-info-container">
                         <div class="movie-poster">
-                            <img src="${(details.Poster != " N/A") ? details.Poster : "image_not_found.png"}"
+                            <img src="${(details.Poster != "N/A") ? details.Poster : "image_not_found.png"}"
                                 alt="movie poster">
                         </div>
                         <div class="movie-info">
@@ -220,6 +221,7 @@ window.addEventListener('click', (event) => {
         fade(searchList, 0, 'none')
     }
 })
+
 const searchForm = document.querySelector('#searchForm');
 const noResults = document.querySelector('.no-results');
 const noResultsText = document.querySelector('.no-results-text');
@@ -227,6 +229,7 @@ const changingText = document.querySelector('.changing-word');
 //SLIDER SECTION-------------------------------------------------
 //slider results from general search keyword on submit
 // submit handler.. capture input and send request to api and add images
+
 searchForm.addEventListener('submit', async function (e) {
     e.preventDefault();
     fade(searchList, 0, 'none')
@@ -235,7 +238,7 @@ searchForm.addEventListener('submit', async function (e) {
     const URL = `https://omdbapi.com/?s=${input}&page=1${api_key}${resultType}`;
     const res = await fetch(`${URL}`);
     const newResults = await res.json();
-    changingText.style.color = brightColorGen();
+    changingText.style.color = randomColorGen();
     changingText.innerText = ' ' + input.charAt(0).toUpperCase() + input.slice(1);
     searchForm.elements.query.value = '';
 
@@ -243,47 +246,37 @@ searchForm.addEventListener('submit', async function (e) {
         searchElement.style.margin = '0 0 0 0'
         fade(noResults, 0, 'none')
         fade(headerInfo, 1)
-        arrow.forEach(arr => {
-            fade(arr, 1)
-        })
+        arrow.forEach(arr => fade(arr, 1))
         fade(sliderContainer, 1, 'flex')
         displaySliderItems(newResults.Search);
     } else {
-        if (input.length === 0) {
-            noResultsText.innerHTML = `It looks like you forgot to enter a search term. Try searching for a specific topic${errorChange.innerText}`
-        } else {
-            noResultsText.innerHTML = `We couldn't find anything for that. Try searching for a specific topic${errorChange.innerText} to get better results.`
-        }
+        input.length === 0
+            ? noResultsText.innerHTML = `It looks like you forgot to enter a search term. Try searching for a specific topic${errorChange.innerText}`
+            : noResultsText.innerHTML = `We couldn't find anything for that. Try searching for a specific topic${errorChange.innerText} to get better results.`
         fade(headerInfo, 0)
-        arrow.forEach(arr => {
-            fade(arr, 0)
-        })
+        arrow.forEach(arr => fade(arr, 0))
         fade(sliderContainer, 0, 'none')
         fade(noResults, 1, 'flex')
     }
 });
 
-let slider = document.querySelector('.slider');
+
 // add search results to page as slider on submit
 const displaySliderItems = (input) => {
-    try {
-        slider.innerHTML = ''
-        for (let i = 0; i <= input.length; i++) {
-            let movieContainer = document.createElement('div');
-            movieContainer.dataset.id = input[i].imdbID;
-            // console.log(movieContainer.dataset.id)
-            movieContainer.classList.add('movie-container')
-            if (input[i].Poster != "N/A")
-                imageMovie = input[i].Poster;
-            else
-                imageMovie = "image_not_found.png";
-            movieContainer.innerHTML = `
-        <img src="${imageMovie}" alt="movie image">
-        `
-            slider.appendChild(movieContainer)
-        }
+
+    slider.innerHTML = ''
+    for (let i = 0; i <= input.length; i++) {
+        let movieContainer = document.createElement('div');
+        movieContainer.classList.add('movie-container')
+        input[i].Poster != "N/A" ? imageMovie = input[i].Poster
+            : imageMovie = "image_not_found.png"
+        movieContainer.innerHTML = `
+            <img src="${imageMovie}" alt="movie image">
+            `
+        movieContainer.dataset.id = input[i].imdbID;
+        slider.appendChild(movieContainer)
     }
-    catch { }
+
 }
 
 // grab imbd ID of each movie and send another request for more info
@@ -291,6 +284,7 @@ function loadSliderDetails() {
     let movieContainer = slider.querySelectorAll('.movie-container')
     movieContainer.forEach(movie => {
         movie.addEventListener('mouseenter', async (e) => {
+            
             e.stopPropagation()
             arrow.forEach(arr => fade(arr, 0))
             const result = await fetch(`http://www.omdbapi.com/?i=${movie.dataset.id}${api_key}${resultType}&plot=full`)
@@ -304,15 +298,17 @@ function loadSliderDetails() {
     })
 }
 
+// remove api info from container on mouseleave
 function removeItems() {
-    const newInfoContainer = document.querySelectorAll('.info-container')
-    const newBioOverlay = document.querySelectorAll('.bio-overlay')
+    const infoContainer = document.querySelectorAll('.info-container')
+    const bioOverlay = document.querySelectorAll('.bio-overlay')
     setTimeout(() => {
-        newInfoContainer.forEach(info => info.remove())
-        newBioOverlay.forEach(bio => bio.remove())
+        infoContainer.forEach(info => info.remove())
+        bioOverlay.forEach(bio => bio.remove())
     }, "400")
 }
 
+// display details for each slider
 const displaySliderDetails = (input, item) => {
     // add movie container items that appear on hover
     const infoContainer = document.createElement('div')
@@ -396,7 +392,7 @@ function titleLengthTest(input) {
     if (input.innerText.split(' ').length > 13) { input.style.fontSize = '.8rem' }
 }
 
-// delete previous results if any when new search is submitted
+// delete previous results when new search is submitted
 const button = document.querySelector('button');
 const deleteImg = button.addEventListener('click', () => {
     while (slider.firstChild) {
@@ -404,31 +400,35 @@ const deleteImg = button.addEventListener('click', () => {
     }
 })
 
-// function to generate light colors for the query term
-const brightColorGen = () => {
-    return "hsl(" + 360 * Math.random() + ',' +
-        (25 + 70 * Math.random()) + '%,' +
-        (85 + 10 * Math.random()) + '%)'
+// function to generate light or dark colors based on color scheme
+const randomColorGen = () => {
+    const h = Math.floor(Math.random() * 360);
+    const s = Math.floor(Math.random() * (100 + 1))
+    let l = ''
+    resultType.includes('movie')
+        ? l = Math.floor((1 + Math.random()) * (100 / 2 + 1))
+        : l = Math.floor(Math.random() * (100 / 2 + 1))
+    return `hsl(${h}, ${s}%, ${l}%)`
 }
 
 // general function to fade items in and out
 const fade = (input, opacity, display, height) => {
-    try {
-        if (input.style.opacity === '' || input.style.opacity === '0') {
-            input.style.display = display;
-            setTimeout(() => {
-                input.style.opacity = opacity;
-                input.style.height = height;
-            }, "100")
-        } else {
+try {
+     if (input.style.opacity === '' || input.style.opacity === '0') {
+        input.style.display = display;
+        setTimeout(() => {
             input.style.opacity = opacity;
             input.style.height = height;
-            setTimeout(() => {
-                input.style.display = display;
-            }, "300")
-        }
+        }, "100")
+    } else {
+        input.style.opacity = opacity;
+        input.style.height = height;
+        setTimeout(() => {
+            input.style.display = display;
+        }, "300")
     }
-    catch { }
+}
+catch{}
 }
 
 // slider arrow  click listener.. 
@@ -457,52 +457,3 @@ function onHandleClick(handle) {
 
 
 
-// item.innerHTML = `
-
-    // <img src="${movieInfo.Poster}" alt="movie image">
-    // <div class="info-container">
-    //     <h3>${movieInfo.Title}</h3>
-    //     <h4>Year: ${movieInfo.Year}</h4>
-    //     ${bioOpen}
-    //     <div class="link-container">
-    //         <a href="https://www.rottentomatoes.com/" target="_blank">
-    //             <span>Reviews</span>
-    //         </a>
-    //         <div id="info-btn">
-    //             <span>More Info</span>
-    //         </div>
-    //         <a href="https://www.google.com/search?q=${movieInfo.Title}" target="_blank">
-    //             <span>Stream</span>
-    //         </a>
-    //     </div>
-    // </div>
-    // <div class="bio-overlay">
-    //     <h4>Overview</h4>
-    //     <p>${movieInfo.Plot}</p>
-    //     <div class="close-bio-text"></div>
-    // </div>
-
-
-    // const reviewLink = document.createElement('a')
-    // reviewLink.setAttribute('href', 'https://www.rottentomatoes.com/')
-    // reviewLink.setAttribute('target', '_blank')
-    // const reviewSpan = document.createElement('span')
-    // reviewSpan.innerText = 'Reviews'
-    // reviewLink.append(reviewSpan)
-
-    // const searchLink = document.createElement('a')
-    // searchLink.setAttribute('href', `https://www.google.com/search?q=${input.Title}`)
-    // searchLink.setAttribute('target', '_blank')
-    // const searchSpan = document.createElement('span')
-    // searchSpan.innerText = 'Search'
-    // searchLink.append(searchSpan)
-
-    // // streamlink
-
-    // const streamLink = document.createElement('a')
-
-    // streamLink.setAttribute('href', 'https://www.google.com/search?q=input.Title')
-    // streamLink.setAttribute('target', '_blank')
-    // const streamSpan = document.createElement('span')
-    // streamSpan.innerText = 'Stream'
-    // streamLink.append(streamSpan)
