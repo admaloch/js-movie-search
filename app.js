@@ -147,9 +147,6 @@ async function loadMovies(searchTerm) {
     if (results.Response == "True") displayMovieList(results.Search);
 }
 
-
-
-
 // add searchlist items
 function displayMovieList(movies) {
     searchList.innerHTML = "";
@@ -171,6 +168,7 @@ function displayMovieList(movies) {
         searchList.appendChild(movieListItem);
     }
     loadMovieDetails()
+    // load slider details is supposed to run in the displaySliderItems function at 282, but doesn't work.. i tried it here and it kindof works.
     loadSliderDetails()
 }
 
@@ -239,9 +237,6 @@ window.addEventListener('click', (event) => {
 
 //SLIDER SECTION-------------------------------------------------
 //create slider of images with info on request
-
-
-
 searchForm.addEventListener('submit', async function (e) {
     e.preventDefault();
     const searchForm = document.querySelector('#searchForm');
@@ -289,6 +284,8 @@ const displaySliderItems = (input) => {
         movieContainer.dataset.id = input[i].imdbID;
         slider.appendChild(movieContainer)
     }
+    // loadSliderDetails()
+    // this should run here but it doesnt work. it randomly works if you run it in the displayMovieList function at line 151..which is part of the movieList 
 }
 
 // grab imbd ID of each movie and send another request for more info
