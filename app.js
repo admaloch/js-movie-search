@@ -1,6 +1,3 @@
-// tmbd api key = 025781367a111a39acbfd9121bed34f28
-// ex.requst = https://api.themoviedb.org/3/movie/550?api_key=025781367a111a39abfd9121bed34f28
-
 // variables for keydown searchList
 const searchInput = document.getElementById('search-input');
 const searchList = document.getElementById('search-list');
@@ -262,7 +259,7 @@ function onSubmit(results) {
         fade(sliderContainer, 1, 'flex')
         displaySliderItems(results.Search);
     } else {
-        input.length === 0
+        results.length === 0
             ? noResultsText.innerHTML = `It looks like you forgot to enter a search term. Try searching for a specific topic${errorChange.innerText}`
             : noResultsText.innerHTML = `We couldn't find anything for that. Try searching for a specific topic${errorChange.innerText} to get better results.`
         fade(headerInfo, 0)
@@ -275,7 +272,7 @@ function onSubmit(results) {
 // add search results to page as slider on submit
 const displaySliderItems = (input) => {
     slider.innerHTML = ''
-    for (let i = 0; i <= input.length; i++) {
+    for (let i = 0; i < input.length; i++) {
         let movieContainer = document.createElement('div');
         movieContainer.classList.add('movie-container')
         input[i].Poster != "N/A" ? imageMovie = input[i].Poster
@@ -284,7 +281,7 @@ const displaySliderItems = (input) => {
         movieContainer.dataset.id = input[i].imdbID;
         slider.appendChild(movieContainer)
     }
-    // loadSliderDetails()
+    // loadSliderDetails(movieContainer)
     // this should run here but it doesnt work. it randomly works if you run it in the displayMovieList function at line 151..which is part of the movieList 
 }
 
