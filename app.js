@@ -176,7 +176,7 @@ function loadMovieDetails() {
             // console.log(movie.dataset.id)
             fade(searchList, 0, 'none')
             searchInput.value = '';
-            const result = await fetch(`http://www.omdbapi.com/?i=${movie.dataset.id}${api_key}${resultType}&plot=full`)
+            const result = await fetch(`https://www.omdbapi.com/?i=${movie.dataset.id}${api_key}${resultType}&plot=full`)
             const movieDetails = await result.json();
             displayMovieDetails(movieDetails);
         })
@@ -293,7 +293,7 @@ function loadSliderDetails() {
             e.stopPropagation()
             arrow.forEach(arr => fade(arr, 0))
             const movieId = movie.dataset.id;
-            const result = await fetch(`http://www.omdbapi.com/?i=${movieId}${api_key}${resultType}&plot=full`)
+            const result = await fetch(`https://www.omdbapi.com/?i=${movieId}${api_key}${resultType}&plot=full`)
             const movieInfo = await result.json();
             displaySliderDetails(movieInfo, movie)
         });
