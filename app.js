@@ -165,8 +165,6 @@ function displayMovieList(movies) {
         searchList.appendChild(movieListItem);
     }
     loadMovieDetails()
-    // load slider details is supposed to run in the displaySliderItems function at 282, but doesn't work.. i tried it here and it kindof works.
-    loadSliderDetails()
 }
 
 function loadMovieDetails() {
@@ -280,27 +278,23 @@ const displaySliderItems = (input) => {
         movieContainer.innerHTML = `<img src="${imageMovie}" alt="movie image">`
         movieContainer.dataset.id = input[i].imdbID;
         slider.appendChild(movieContainer)
+        loadSliderDetails(movieContainer)
     }
-    // loadSliderDetails(movieContainer)
-    // this should run here but it doesnt work. it randomly works if you run it in the displayMovieList function at line 151..which is part of the movieList 
 }
 
 // grab imbd ID of each movie and send another request for more info
-function loadSliderDetails() {
-    let movieContainer = slider.querySelectorAll('.movie-container')
-    movieContainer.forEach(movie => {
-        movie.addEventListener('mouseenter', async (e) => {
-            e.stopPropagation()
-            arrow.forEach(arr => fade(arr, 0))
-            const movieId = movie.dataset.id;
-            const result = await fetch(`https://www.omdbapi.com/?i=${movieId}${api_key}${resultType}&plot=full`)
-            const movieInfo = await result.json();
-            displaySliderDetails(movieInfo, movie)
-        });
-        movie.addEventListener('mouseleave', () => {
-            arrow.forEach(arr => fade(arr, 1))
-            removeItems()
-        })
+function loadSliderDetails(movie) {
+    movie.addEventListener('mouseenter', async (e) => {
+        e.stopPropagation()
+        arrow.forEach(arr => fade(arr, 0))
+        const movieId = movie.dataset.id;
+        const result = await fetch(`https://www.omdbapi.com/?i=${movieId}${api_key}${resultType}&plot=full`)
+        const movieInfo = await result.json();
+        displaySliderDetails(movieInfo, movie)
+    });
+    movie.addEventListener('mouseleave', () => {
+        arrow.forEach(arr => fade(arr, 1))
+        removeItems()
     })
 }
 
