@@ -62,12 +62,12 @@ const mediaTypes = [
         errorMSG: ' or movie'
     },
     Tv = {
-        name: 'Tv',
+        name: 'TV',
         type: '&type=series',
         scheme: colorSchemes.tvScheme,
-        title: 'Tv Show',
-        subTitle: 'Tv shows',
-        errorMSG: ' or tv show'
+        title: 'TV Show',
+        subTitle: 'TV shows',
+        errorMSG: ' or TV show'
     },
     Both = {
         name: 'Both',
