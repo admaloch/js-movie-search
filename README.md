@@ -1,6 +1,6 @@
 Movie search app created using OMDB api
 
-This is a work in progress..
+This is a work in progress...
 
 The intent of this project was to learn about working with API data and delve into the world of asynchronous javascript. It is still a work in progress, but is currently functional. 
 
