@@ -13,7 +13,6 @@
         integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
     <!-- style -->
     <link rel="stylesheet" href="./style.css">
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 
 <body>
@@ -33,22 +32,22 @@
                 <button>Search</button>
                 <div class="search-list" id="search-list"></div>
             </form>
-            
+
         </div>
 
         <!-- subheader section -->
-        
-            <div class="header-info container">
-                <h3 class="title"><span class="sub-title-change">Movies</span> about:<span class="changing-word"></span>
-                </h3>
-                <div class="progress-bar">
-                    <div class="progress-item active"></div>
-                    <div class="progress-item "></div>
-                    <div class="progress-item"></div>
-                    <div class="progress-item"></div>
-                </div>
+
+        <div class="header-info container">
+            <h3 class="title"><span class="sub-title-change">Movies</span> about:<span class="changing-word"></span>
+            </h3>
+            <div class="progress-bar">
+                <div class="progress-item active"></div>
+                <div class="progress-item "></div>
+                <div class="progress-item"></div>
+                <div class="progress-item"></div>
             </div>
-       
+        </div>
+
 
         <!-- modal section -->
         <div class="container-fluid" id="modal">
@@ -67,13 +66,20 @@
 
         <!-- message if results didn't come up with anything -->
         <div class="no-results">
-            <h3 class="no-results-text">It looks like you forgot to enter a search term. Try searching for a specific topic<span id='error-change'> or movie</span>  to get results.
+            <h3 class="no-results-text">It looks like you forgot to enter a search term. Try searching for a specific
+                topic<span id='error-change'> or movie</span> to get results.
             </h3>
         </div>
     </section>
 
     <!-- js -->
-    <script src="app.js"></script>
+    <script src="./js/data.js"></script>
+    <script src="./js/functions.js"></script>
+    <script src="./js/main.js"></script>
+    <script src="./js/modal.js"></script>
+    <script src="./js/onKeyRequest.js"></script>
+    <script src="./js/slider.js"></script>
+
 </body>
 
 </html>

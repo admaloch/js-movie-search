@@ -114,19 +114,22 @@ body {
 }
 
 .form-control {
-
+    border-radius: 0;
     font-size: 1.2rem;
-
-
     outline: none;
     color: var(--text);
-
+    
 }
+.form-control:focus {
+    border-color: green;
+    box-shadow: none;
+  }
 
 #searchForm {
     height: 50px;
     display: flex;
     position: relative;
+    
 }
 
 
@@ -148,10 +151,18 @@ body {
 #searchForm input {
     width: 250px;
     margin-right: 1rem;
+    border: var(--color2) solid 3px;
+    transition: all .4s ease-in-out;
+    background-color: var(--mainBackground);
+}
+
+#searchForm input:hover, #searchForm input:focus {
+    color: black;
+    border: var(--color3) solid 3px;
+    background-color: white;
 }
 
 /* result type buttons */
-
 #result-type-container {
     display: flex;
     margin: 1rem 0;
@@ -199,7 +210,7 @@ body {
 
 
 
-.search-list .search-list-item {
+.search-list-item {
     background-color: var(--containerBackground);
     color: var(--containertext);
     border: var(--containertext) solid 1px;
@@ -211,15 +222,6 @@ body {
     -webkit-transition: background-color 200ms ease;
     -o-transition: background-color 200ms ease;
     transition: background-color 200ms ease;
-}
-
-.search-list .search-list-item:Hover {
-    background-color: var(--color3);
-
-    border: var(--color1) solid 1px;
-}
-
-.search-list-item {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -227,6 +229,13 @@ body {
     align-items: center;
 
 }
+
+.search-list-item:Hover {
+    background-color: var(--color3);
+
+    border: var(--color1) solid 1px;
+}
+
 
 .search-item-thumbnail img {
     width: 40px;
@@ -249,7 +258,6 @@ body {
 
 /* .img-flex-container {
     background-color: aliceblue;
-
 } */
 
 /* individual result modal */
@@ -315,15 +323,10 @@ body {
     padding: 0;
     margin: 0 auto;
     border: var(--text) solid 5px;
-
     max-width: 400px;
 }
 
-
-
 /* movie info stylings */
-
-
 .movie-misc-info {
     list-style-type: none;
     display: -webkit-box;
@@ -336,7 +339,6 @@ body {
     -ms-flex-pack: center;
     justify-content: center;
     padding: 0;
-
 }
 
 .movie-misc-info li {
