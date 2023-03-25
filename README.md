@@ -8,8 +8,8 @@ Issues:
 The results slider isn’t finished so it runs endlessly, and also needs to be tweaked to properly center searches that only return a few results. This is a fairly simple fix with css and js.
 
 Future additions:
-Expand to allow user to search by genrem search by people (actors, director etc..) and search trending shows and movies.
-I also am interested in expanding into a full stack application with the ability to set up user account, save/delete results and see results based off of liked lists etc..
+Expand to allow user to search by genre, by people (actors, director etc..) and trending shows/movies.
+I also am interested in expanding into a full stack application that gives the user the ability to set up an account, save/delete results and see results based off of liked lists etc..
 
 Live link:
 https://admaloch.github.io/movie-search/
