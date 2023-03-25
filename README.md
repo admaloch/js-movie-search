@@ -16,4 +16,4 @@ Expand to allow user to
 -Expand into a full stack application with the ability to set up user account, save/delete results and see results based off of liked lists etc..
 
 Live link:
-https://admaloch.github.io/tvsearch.io/
+https://admaloch.github.io/movie-search/
