@@ -6,6 +6,8 @@ Issues:
 
 The results slider isn’t finished so it runs endlessly, and also needs to be tweaked to properly center searches that only return a few results. This is a fairly simple fix with css and js.
 
+Also, not optimized for mobile yet. 
+
 Future additions:
 
 Expand to allow user to search by genre, people (actors, director etc.) and trending shows/movies.
