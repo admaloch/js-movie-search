@@ -4,8 +4,6 @@ The intent of this project was to learn about working with APIs and delve into t
 
 Issues:
 
-The results slider isn’t finished so it runs endlessly, and also needs to be tweaked to properly center searches that only return a few results. This is a fairly simple fix with css and js.
-
 Also, not optimized for mobile yet. 
 
 Future additions:
