@@ -433,9 +433,11 @@ body {
     border-radius: 50%;
     transition: transform .5s ease-in-out;
     display: inline-block;
+   
 }
 
 .movie-container:hover {
+
     transform: scale(1.5);
     /* filter: blur(3px); */
     z-index: 100;
@@ -690,12 +692,14 @@ body {
 .progress-item {
     flex: 0 0 2.5rem;
     min-width: 2.5rem;
-    height: .3rem;
-    background-color: var(--color3);
+    height: .8rem;
+    background-color: var(--color2);
+    opacity: .5;
 }
 
 .progress-item.active {
-    background-color: var(--color1);
+    background-color: var(--color3);
+    opacity: 1;
 }
 
 .no-results {

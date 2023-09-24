@@ -3,6 +3,7 @@ const searchInput = document.getElementById('search-input');
 const searchList = document.getElementById('search-list');
 // variables for slider on form submit
 const slider = document.querySelector('.slider');
+const progressBar = document.querySelector('.progress-bar');
 const sliderContainer = document.querySelector('.slider-container');
 const searchElement = document.querySelector('.search-element');
 const headerInfo = document.querySelector('.header-info');
@@ -27,26 +28,29 @@ const colorSchemes = {
         '--color2': '#d0f4de', //green
         '--color3': '#fdfcdc', //light yellow
         '--overlay': 'rgba(248, 247, 255, .8)',
+        
     },
     tvScheme: {
         '--text': '#022B3A',  //dark blue
         '--mainBackground': '#f7ede2', //cream
         '--containertext': '#f7ede2', //cream
         '--containerBackground': '#022B3A',//dark blue
-        '--color1': '#ee4266', //light blue
+        '--color1': '#219ebc', //light blue
         '--color2': '#03045e', //purple
         '--color3': '#1F7A8C',  //teal
         '--overlay': 'rgba(2, 43, 58, .8)',
+       
     },
     bothScheme: {
         '--text': '#284b63',  //dark blue
         '--mainBackground': '#cbc0d3', //light purple
         '--containertext': '#cbc0d3', //light purple
         '--containerBackground': '#284b63',//dark blue
-        '--color1': '#fff3b0', //light green
+        '--color1': '#c1121f', //light green
         '--color2': '#023e8a', //dark blue
         '--color3': '#1b4332',  //light yellow
         '--overlay': 'rgba(40, 75, 99, .8)',
+     
     },
 }
 // object for  info to change color scheme titles based on search query

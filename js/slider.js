@@ -1,16 +1,24 @@
 //create slider of images with info on request -- ombd requires two seperate searches to get more than 10 results
-searchForm.addEventListener('submit', async function (e) {
-    e.preventDefault();
-    let inputValue = searchForm.elements.query.value;
-    const URL = `https://omdbapi.com/?s=${inputValue}&page=1${api_key}${resultType}`;
-    const res = await fetch(`${URL}`);
-    const mainResults = await res.json();
-    const URL2 = `https://omdbapi.com/?s=${inputValue}&page=2${api_key}${resultType}`;
-    const res2 = await fetch(`${URL2}`);
-    const page2Results = await res2.json();
-    onSubmit(mainResults, page2Results)
-    formHandler(inputValue)
-});
+try {
+    searchForm.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        let inputValue = searchForm.elements.query.value;
+        const URL = `https://omdbapi.com/?s=${inputValue}&page=1${api_key}${resultType}`;
+        const res = await fetch(`${URL}`);
+        const mainResults = await res.json();
+        const URL2 = `https://omdbapi.com/?s=${inputValue}&page=2${api_key}${resultType}`;
+        const res2 = await fetch(`${URL2}`);
+        const page2Results = await res2.json();
+        onSubmit(mainResults, page2Results)
+        formHandler(inputValue)
+        slider.style.setProperty('--slider-index', 0)
+        calculateProgressBar(slider)
+
+    });
+} catch (error) {
+    console.log(error)
+}
+
 
 const formHandler = (inputValue) => {
     const searchForm = document.querySelector('#searchForm');
@@ -126,60 +134,4 @@ const deleteImg = button.addEventListener('click', () => {
     while (slider.firstChild) slider.removeChild(slider.lastChild)
 })
 
-// slider arrow  click listener.. 
-document.addEventListener('click', e => {
-    let handle
-    if (e.target.matches('.handle')) {
-        handle = e.target;
-    } else {
-        handle = e.target.closest('.handle');
-    } if (handle != null) {
-        onHandleClick(handle)
-    }
-})
 
-// handler function.. capture slider index and change value to determine movement
-function onHandleClick(handle) {
-    const sliderIndex = parseInt(getComputedStyle(slider).getPropertyValue('--slider-index'));
-    if (handle.classList.contains('left-handle')) {
-        slider.style.setProperty('--slider-index', sliderIndex - 1)
-    } if (handle.classList.contains('right-handle')) {
-        slider.style.setProperty('--slider-index', sliderIndex + 1)
-    }
-}
-
-
-//alt inner html can't get to work
-// const displaySliderDetails = (input, item) => {
-
-//     let scores = '';
-//     !input.Ratings[1]
-//         ? scores = `Imdb score: ${input.imdbRating}`
-//         : scores = `Rotten Tomatoes Score: ${input.Ratings[1].Value}`;
-
-//     item.innerHTML = `
-//         <div class="info-container">
-//             <h3 class="movie-title">${input.Title}</h3>
-//             <h4>Directed by: ${input.Director}</h4>
-//             <h4>Released: ${input.Released.split(' ').pop()}</h4>
-//             <h4>Rated: ${input.Rated}</h4>
-//             <h4>Type:  ${input.Type.charAt(0).toUpperCase() + input.Type.slice(1)} </h4>
-//             <h4>Rotten Tomatoes Score: ${scores}</h4>
-//             <div class="hover-btn">Overview</div>
-//             <div class="hover-btn">More Information</div>
-//         </div>
-//         <div class="bio-overlay">
-//             <h4>Overview</h4>
-//             <p>${input.Plot}</p>
-//             <div class="close-bio-text">
-//             </div>
-//         </div>
-//     `
-//     const bioOpen = document.createElement('div')
-//     const bioOverlay = document.createElement('div')
-//     const bioClose = document.createElement('div')
-//     const moreBtn = document.createElement('div')
-//     bioListeners(bioOverlay, bioOpen, bioClose, item)
-//     bioClick(input, moreBtn)
-
-// }

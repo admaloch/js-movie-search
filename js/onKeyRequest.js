@@ -1,9 +1,11 @@
 // api request to generate movie/tv list on keydown
+
 async function loadMovies(searchTerm) {
     const URL = `https://omdbapi.com/?s=${searchTerm}&page=1${api_key}${resultType}`;
     const res = await fetch(`${URL}`);
     const results = await res.json();
     if (results.Response == "True") displayMovieList(results.Search);
+ 
 }
 
 // add searchlist items

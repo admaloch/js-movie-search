@@ -244,6 +244,7 @@ searchForm.addEventListener('submit', async function (e) {
     changingText.innerText = ' ' + input.charAt(0).toUpperCase() + input.slice(1);
     changingText.style.color = randomColorGen();
     onSubmit(results)
+    console.log(slider)
 });
 
 function onSubmit(results) {

@@ -39,9 +39,22 @@ function displayMovieDetails(details) {
             item.classList.add('d-none')
         }
     });
-    //close modal when button is clicked
+    // //close modal when button is clicked
     const btnClose = document.getElementById('btn-close');
     btnClose.addEventListener('click', () => {
         fade(modal, 0, 'none')
     })
+
+
+
+    document.querySelector('.overlay').addEventListener('click', (event) => {
+        if (event.target.classList.contains('overlay')) {
+            fade(modal, 0, 'none')
+        }
+    })
+
+
+
+
+
 }
