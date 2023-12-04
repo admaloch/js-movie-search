@@ -1,12 +1,18 @@
-Movie search app created using OMDB api
+# React-movie-search
 
-The intent of this project was to learn about working with APIs and delve into the world of asynchronous javascript.
+<b>About this project:</b><br/> 
+This is a movie search app built with vanilla JS that allows you to search for movies, tv shows or both. The movie data is from OMDB API. The intent of this project was to get some practice with asynchronous Javascript and working with APIs.
 
-Future additions:
+<b>Technologies used:</b><br/> 
+--JavaScript<br/>
+--OMDB API: https://www.omdbapi.com/<br/>
 
-Expand to allow user to search by genre, people (actors, director etc.) and trending shows/movies.
+<b>Takeaways:</b><br/> 
+The biggest takeaway of this project was learning about asynchronous javascript. 
 
-I also am interested in expanding to give the user the ability to set up an account, save/delete results and see results based off of liked lists etc.
+<b>Current status:</b><br/> 
+The project is currently finished.
 
-Live link:
-https://admaloch.github.io/movie-search/
+<b>Note:</b><br/> 
+This app has a search input that runs api calls on key press, but OMDB prevents that if the request returns too many results so it only works with 3 letters or more. 
+
