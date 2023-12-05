@@ -1,17 +1,18 @@
 # JS-movie-search
 
-<b>About this project:</b><br/> 
-This is a movie search app built with vanilla JS that allows you to search for movies, tv shows or both. The movie data is from OMDB API. The intent of this project was to get some practice with asynchronous Javascript and working with APIs.
+<b>About this Project:</b><br/>
+This is a movie search app built with vanilla JS that enables users to search for movies, TV shows, or both. The movie data is sourced from the OMDB API. The intent of this project was to gain practice with asynchronous JavaScript and working with APIs.
 
-<b>Technologies used:</b><br/> 
---JavaScript<br/>
---OMDB API: https://www.omdbapi.com/<br/>
+<b>Technologies Used:</b><br/>
+--<b>JavaScript</b><br/>
+--<b>[OMDB API](https://www.omdbapi.com/)</b><br/>
 
-<b>Takeaways:</b><br/> 
-The biggest takeaway of this project was learning about working with async javascript. This was particularly tricky as I ended up getting stuck trying to access data that didn't exist yet. Dealing with some of these issues helped me develop a better understanding for how async functions work and how to use them without getting lost. In addition, I was able to strengthen my understanding of async concepts like working with promises, the call stack and understanding what the browser does behind the scenese to handle asynchronous operations.
+<b>Takeaways:</b><br/>
+The most significant takeaway from this project was gaining hands on experience working with asynchronous JavaScript. This proved particularly challenging when encountering situations where data didn't exist yet. Resolving these issues enhanced my comprehension of how asynchronous functions operate and how to utilize them effectively. Additionally, I deepened my understanding of related concepts such as working with promises, the call stack, and the browser's role in handling asynchronous operations.
 
-<b>Current status:</b><br/> 
-The project is currently finished, but was rebuilt with react. Check that out here https://github.com/admaloch/react-movie-search
+<b>Current Status:</b><br/>
+The project is complete; however, it has been reconstructed using React. Explore the React version [here](https://github.com/admaloch/react-movie-search).
 
-<b>Note:</b><br/> 
-This app has a search input that runs api calls on key press, but OMDB prevents that if the request returns too many results so it only works with 3 letters or more. 
+<b>Note:</b><br/>
+This app features a search input that triggers API calls on key presses. However, please note that OMDB restricts requests if the response yields too many results, allowing searches with three letters or more.
+
