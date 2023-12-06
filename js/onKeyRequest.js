@@ -4,6 +4,7 @@ async function loadMovies(searchTerm) {
     const URL = `https://omdbapi.com/?s=${searchTerm}&page=1${api_key}${resultType}`;
     const res = await fetch(`${URL}`);
     const results = await res.json();
+    console.log(results)
     if (results.Response == "True") displayMovieList(results.Search);
  
 }

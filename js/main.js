@@ -49,7 +49,7 @@ const changeColorVars = vars => Object.entries(vars)
 // captures value and determines if movielist shows up
 function findMovies() {
     let searchTerm = (searchInput.value).trim();
-    if (searchTerm.length > 2) {
+    if (searchTerm.length > 0) {
         fade(searchList, 1, 'flex')
         searchList.scrollTop = 0
         loadMovies(searchTerm);

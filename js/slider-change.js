@@ -55,8 +55,7 @@ function onHandleClick(handle) {
 
     const progressBarItemCount = Math.ceil(itemCount / itemsPerScreen)
     console.log(sliderIndex, '= slider index', progressBarItemCount, '= progress bar count')
-    // console.log(itemCount, '= item count')
-    // console.log(itemsPerScreen, '= items per screen')
+
 
     let newSliderIndex = 0
     if (handle.classList.contains('left-handle')) {
@@ -70,19 +69,6 @@ function onHandleClick(handle) {
     progressBar.children[sliderIndex].classList.remove('active')
     progressBar.children[newSliderIndex].classList.add('active')
 
-// code for centering if results don't return even number
-    // let updatedIndex = parseInt(getComputedStyle(slider).getPropertyValue('--slider-index')) 
-    // if (itemCount / itemsPerScreen % 1 != 0) {
-       
-    //     console.log(currItemsPerScreen, 'curr item per screen')
-    //     if (updatedIndex + 1 === progressBarItemCount) {
-    //         console.log('the last slide')
-    //         slider.style.setProperty("--images-per-screen", 4)
-    //     } else {
-    //         console.log('not the last slide')
-    //         slider.style.setProperty("--images-per-screen", 5)
-    //     }
-    // }
 
 
 }
