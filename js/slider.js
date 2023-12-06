@@ -38,6 +38,7 @@ function onSubmit(mainResults, page2Results) {
         fade(searchList, 0, 'none')
         searchElement.style.margin = '0 0 0 0'
         fade(noResults, 0, 'none')
+        
         fade(headerInfo, 1)
         arrow.forEach(arr => fade(arr, 1))
         fade(sliderContainer, 1, 'flex')

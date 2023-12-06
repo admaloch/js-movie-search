@@ -1,7 +1,7 @@
 
 // change margin on initial load to make transition from center to top smooth
 window.onload = function () {
-    searchElement.style.margin = '8rem 0 0 0'
+    // searchElement.style.margin = '8rem 0 0 0'
 };
 
 // result type buttons click change type of requests from movie to tv and change colors
@@ -17,7 +17,7 @@ function changeTheme() {
             fade(sliderContainer, 0, 'none')
             fade(headerInfo, 0)
             fade(arrow, 0)
-            searchElement.style.margin = '8rem 0 0 0'
+            // searchElement.style.margin = '8rem 0 0 0'
             // change result type variable
             changeMedia(btns[i])
         });

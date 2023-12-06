@@ -97,7 +97,7 @@ function changeTheme() {
             fade(sliderContainer, 0, 'none')
             fade(headerInfo, 0)
             fade(arrow, 0)
-            searchElement.style.margin = '8rem 0 0 0'
+            // searchElement.style.margin = '8rem 0 0 0'
             // change result type variable
             changeMedia(btns[i])
         });
@@ -215,7 +215,7 @@ function displayMovieDetails(details) {
                         </div>
                     </div>
                 </div>
-            </div>       
+            </div>
     `;
     const btnClose = document.getElementById('btn-close');
     btnClose.addEventListener('click', () => {
@@ -249,10 +249,15 @@ searchForm.addEventListener('submit', async function (e) {
 
 function onSubmit(results) {
     const noResultsText = document.querySelector('.no-results-text');
+    noResults.style.opacity = 0
+    noResults.style.display = 'none'
+
     if (results.Response == "True") {
         fade(searchList, 0, 'none')
         searchElement.style.margin = '0 0 0 0'
-        fade(noResults, 0, 'none')
+        // fade(noResults, 0, 'none')
+        // noResults.style.opacity = 0
+        // noResults.style.display = 'none'
         fade(headerInfo, 1)
         arrow.forEach(arr => fade(arr, 1))
         fade(sliderContainer, 1, 'flex')
@@ -316,7 +321,7 @@ const displaySliderDetails = (input, item) => {
     appendItem(infoContainer, '', item, 'info-container')
     const title = document.createElement('h3')
     appendItem(title, input.Title, infoContainer, 'movie-title')
-    titleLengthTest(title)
+    // titleLengthTest(title)
     const directed = document.createElement('h4')
     appendItem(directed, `Directed by: ${input.Director}`, infoContainer)
     const released = document.createElement('h4')
@@ -410,24 +415,24 @@ const randomColorGen = () => {
 
 // general function to fade items in and out
 const fade = (input, opacity, display, height) => {
-    try {
-        if (input.style.opacity === '' || input.style.opacity === '0') {
-            input.style.display = display;
-            setTimeout(() => {
-                input.style.opacity = opacity;
-                input.style.height = height;
-            }, "100")
-        } else {
+
+    if (input.style.opacity === '' || input.style.opacity === '0') {
+        input.style.display = display;
+        setTimeout(() => {
             input.style.opacity = opacity;
             input.style.height = height;
-            setTimeout(() => {
-                input.style.display = display;
-            }, "300")
-        }
-    } catch { }
+        }, "100")
+    } else {
+        input.style.opacity = opacity;
+        input.style.height = height;
+        setTimeout(() => {
+            input.style.display = display;
+        }, "300")
+    }
+
 }
 
-// slider arrow  click listener.. 
+// slider arrow  click listener..
 document.addEventListener('click', e => {
     let handle
     if (e.target.matches('.handle')) {

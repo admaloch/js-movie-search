@@ -33,7 +33,7 @@ function bioClick(info, btn) {
 
 // decrease font size for movies with excessively long titles
 function titleLengthTest(input) {
-    if (input.innerText.split(' ').length > 6) { input.style.fontSize = '1.2rem' }
+    if (input.innerText.split(' ').length > 6) { input.style.fontSize = '1rem' }
     if (input.innerText.split(' ').length > 10) { input.style.fontSize = '.9rem' }
     if (input.innerText.split(' ').length > 13) { input.style.fontSize = '.8rem' }
 }
@@ -79,7 +79,7 @@ function removeItems() {
 }
 
 function throttle(cb, delay = 1000) {
-   
+
     let shouldWait = false
     let waitingArgs
     const timeoutFunc = () => {
@@ -91,16 +91,16 @@ function throttle(cb, delay = 1000) {
         setTimeout(timeoutFunc, delay)
       }
     }
-  
+
     return (...args) => {
       if (shouldWait) {
         waitingArgs = args
         return
       }
-  
+
       cb(...args)
       shouldWait = true
       setTimeout(timeoutFunc, delay)
     }
-    
+
   }
