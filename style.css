@@ -408,7 +408,7 @@ body {
 .slider-container {
     margin-top: 3rem;
     display: none;
-    overflow-x: hidden;
+    /* overflow-x: hidden; */
     justify-content: center;
     opacity: 0;
     transition: opacity 1s ease-in-out;

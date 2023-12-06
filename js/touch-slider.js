@@ -1,5 +1,4 @@
 // Add touch event listeners to the slider container
-const sliderContainer = document.querySelector('.slider-container');
 let touchStartX;
 
 sliderContainer.addEventListener('touchstart', (e) => {
