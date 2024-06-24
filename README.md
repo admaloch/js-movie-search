@@ -1,7 +1,7 @@
 # JS-movie-search
 
 <b>About this Project:</b><br/>
-This is a movie search app built with vanilla JS that enables users to search for movies, TV shows, or both. The movie data is sourced from the OMDB API. The intent of this project was to gain practice with asynchronous JavaScript and working with APIs.
+This is a movie search app built with Vanilla JS that enables users to search for movies, TV shows, or both. The movie data is sourced from the OMDB API. The intent of this project was to gain practice with asynchronous JavaScript and working with APIs.
 
 <b>Technologies Used:</b><br/>
 --JavaScript<br/>
